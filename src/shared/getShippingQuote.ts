@@ -1,3 +1,4 @@
+import { RatesEntity } from './types/chitchat.d';
 // https://docs.snipcart.com/v3/webhooks/shipping
 
 import { createShipment } from './chitchats';
@@ -28,12 +29,12 @@ interface ShippingRateError {
 }
 
 interface ShippingQuotes {
-  rates?: Rate[];
+  rates?: RatesEntity[] | null;
   errors?: ShippingRateError[];
 }
 export async function getShippingQuotes(): Promise<ShippingQuotes> {
   // A shipping quote is just a create shipment call with postage_type: 'unknown',
-  const shipment = await createShipment({
+  const res = await createShipment({
     // The User Details
     name: 'Swedish Fish',
     address_1: 'Wollmar Yxkullsgatan 10',
@@ -58,11 +59,7 @@ export async function getShippingQuotes(): Promise<ShippingQuotes> {
     postage_type: 'unknown',
   });
 
-  console.log(shipment);
-
   return {
-    rates: [],
+    rates: res.data?.shipment.rates,
   };
-
-  // Once the Shipment comes back, we need to return the rates
 }

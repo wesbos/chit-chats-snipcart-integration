@@ -7,7 +7,7 @@
     "build": "npx tsc",
     "build-backend": "tsc",
     "build-backend-watch": "tsc -w",
-    "sandbox": "sandbox",
+    "sandbox": "npx sandbox",
     "start": "run-p build-backend-watch sandbox"
   },
   "eslintConfig": {

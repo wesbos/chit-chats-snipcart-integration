@@ -38,6 +38,10 @@ type ChitChatResponse<Data> = {
   headers: Headers;
 };
 
+type ShipmentResponse = {
+  shipment: Shipment;
+};
+
 export async function request<T>({
   endpoint,
   method = 'GET',
@@ -58,7 +62,7 @@ export async function request<T>({
       'Content-Type': 'application/json;',
       Authorization: process.env.CHITCHATS_API_KEY || '',
     },
-    body: JSON.stringify(data),
+    body: method === 'GET' ? undefined : JSON.stringify(data),
     method,
   });
   // if (response.status >= 400 && response.status <= 500) {
@@ -102,32 +106,32 @@ export async function getShipment(
 
 export async function createShipment(
   data: CreateShipmentInput
-): Promise<ChitChatResponse<Shipment>> {
-  const shipment = await request<Shipment>({
+): Promise<ChitChatResponse<ShipmentResponse>> {
+  const shipment = await request<ShipmentResponse>({
     endpoint: 'shipments',
     method: 'POST',
     data,
     json: true,
   });
-  console.dir(shipment, { depth: null });
+  // console.dir(shipment, { depth: null });
   return shipment;
 }
 
-void createShipment({
-  ...sweden,
-  description: 'Hand made bracelet',
-  value: '84.99',
-  value_currency: 'usd',
-  package_type: 'parcel',
-  package_contents: 'merchandise',
-  size_unit: 'cm',
-  size_x: 10,
-  size_y: 5,
-  size_z: 2,
-  weight_unit: 'g',
-  weight: 250,
-  postage_type: 'unknown',
-  ship_date: 'today',
-});
+// void createShipment({
+//   ...sweden,
+//   description: 'Hand made bracelet',
+//   value: '84.99',
+//   value_currency: 'usd',
+//   package_type: 'parcel',
+//   package_contents: 'merchandise',
+//   size_unit: 'cm',
+//   size_x: 10,
+//   size_y: 5,
+//   size_z: 2,
+//   weight_unit: 'g',
+//   weight: 250,
+//   postage_type: 'unknown',
+//   ship_date: 'today',
+// });
 
 // refundShipment('N6S21X1E3T');

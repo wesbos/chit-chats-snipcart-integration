@@ -1,13 +1,15 @@
-export async function handler(req: object) {
-  console.log('hey');
+import { getShipments } from '../../shared/chitchats';
+import { getShippingQuotes } from '../../shared/getShippingQuote';
+import { Request } from '../../shared/types/arc';
 
+export async function handler(req: Request) {
+  const rateResponse = await getShippingQuotes();
+  // const shipments = await getShipments();
   return {
     headers: {
-      'content-type': 'text/html; charset=utf8',
-      'cache-control':
-        'no-cache, no-store, must-revalidate, max-age=0, s-maxage=0',
+      'content-type': 'application/json; charset=utf8',
     },
     statusCode: 200,
-    body: JSON.stringify({ ollkk: true }),
+    body: JSON.stringify(rateResponse),
   };
 }
