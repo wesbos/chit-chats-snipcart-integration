@@ -1,7 +1,7 @@
 export interface ObjectLiteral {
   [key: string]: any;
 }
-export interface Request {
+export interface ArcRequest {
   version: string;
   routeKey: string;
   rawPath: string;

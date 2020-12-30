@@ -1,6 +1,6 @@
 import fetch from 'isomorphic-fetch';
 import dotenv from 'dotenv';
-import { SnipCartOrderResponse, SnipCartOrder } from './types/snipcart.d';
+import { SnipCartOrderResponse, SnipCartOrder } from './types/snipcart';
 
 dotenv.config();
 const endpoint = 'https://app.snipcart.com/api';
@@ -30,10 +30,10 @@ interface MetaData {
 }
 
 export async function updateOrder(
-  order: SnipCartOrder,
+  orderToken: string,
   data: MetaData
 ): Promise<SnipCartOrder> {
-  const res = await fetch(`${endpoint}/orders/${order.token}`, {
+  const res = await fetch(`${endpoint}/orders/${orderToken}`, {
     headers: {
       ...headers,
       'Content-Type': 'application/json',

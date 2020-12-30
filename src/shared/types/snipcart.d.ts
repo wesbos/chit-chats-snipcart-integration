@@ -248,3 +248,11 @@ export interface TaxesEntity1 {
   appliesOnShipping: boolean;
   discountInducedAmountVariation: number;
 }
+
+export interface SnipcartShipmentRate {
+  cost: number;
+  description?: string;
+  guaranteedDaysToDelivery?: number;
+  additionalInfos?: string;
+  shippingProvider?: string;
+}

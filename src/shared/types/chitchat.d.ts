@@ -160,3 +160,133 @@ export interface CreateShipmentInput {
   tracking_number?: string;
   ship_date: string;
 }
+
+export interface ShippingRatesRequest {
+  eventName: string;
+  mode: string;
+  createdOn: string;
+  content: Content;
+}
+export interface Content {
+  vnexT_MigrationFailed: boolean;
+  token: string;
+  isRecurringOrder: boolean;
+  parentToken?: null;
+  parentInvoiceNumber?: null;
+  subscriptionId?: null;
+  currency: string;
+  creationDate: string;
+  modificationDate: string;
+  recoveredFromCampaignId?: null;
+  status: string;
+  paymentStatus?: null;
+  email: string;
+  willBePaidLater: boolean;
+  billingAddress: BillingAddressOrShippingAddress;
+  shippingAddress: BillingAddressOrShippingAddress;
+  shippingAddressSameAsBilling: boolean;
+  creditCardLast4Digits?: null;
+  trackingNumber?: null;
+  trackingUrl?: null;
+  shippingFees: number;
+  shippingProvider?: null;
+  shippingMethod: string;
+  cardHolderName?: null;
+  paymentMethod: string;
+  notes?: null;
+  customFieldsJson: string;
+  userId?: null;
+  completionDate?: null;
+  paymentGatewayUsed: string;
+  paymentDetails: PaymentDetails;
+  taxProvider: string;
+  discounts?: null[] | null;
+  plans?: null[] | null;
+  taxes?: null[] | null;
+  user?: null;
+  items?: (null[] | null)[] | null;
+  refunds?: null[] | null;
+  lang: string;
+  refundsAmount: number;
+  adjustedAmount: number;
+  finalGrandTotal: number;
+  billingAddressFirstName?: null;
+  billingAddressName: string;
+  billingAddressCompanyName?: null;
+  billingAddressAddress1: string;
+  billingAddressAddress2: string;
+  billingAddressCity: string;
+  billingAddressCountry: string;
+  billingAddressProvince: string;
+  billingAddressPostalCode: string;
+  billingAddressPhone?: null;
+  shippingAddressFirstName?: null;
+  shippingAddressName: string;
+  shippingAddressCompanyName?: null;
+  shippingAddressAddress1: string;
+  shippingAddressAddress2: string;
+  shippingAddressCity: string;
+  shippingAddressCountry: string;
+  shippingAddressProvince: string;
+  shippingAddressPostalCode: string;
+  shippingAddressPhone?: null;
+  totalNumberOfItems: number;
+  invoiceNumber: string;
+  billingAddressComplete: boolean;
+  shippingAddressComplete: boolean;
+  shippingMethodComplete: boolean;
+  savedAmount: number;
+  subtotal: number;
+  baseTotal: number;
+  itemsTotal: number;
+  totalPriceWithoutDiscountsAndTaxes: number;
+  taxableTotal: number;
+  grandTotal: number;
+  total: number;
+  totalWeight: number;
+  totalRebateRate: number;
+  customFields?: null[] | null;
+  shippingEnabled: boolean;
+  numberOfItemsInOrder: number;
+  paymentTransactionId: string;
+  metadata?: null;
+  taxesTotal: number;
+  itemsCount: number;
+  summary: Summary;
+  ipAddress: string;
+  userAgent: string;
+  hasSubscriptions: boolean;
+}
+export interface BillingAddressOrShippingAddress {
+  fullName: string;
+  firstName?: null;
+  name: string;
+  company?: null;
+  address1: string;
+  address2: string;
+  fullAddress: string;
+  city: string;
+  country: string;
+  postalCode: string;
+  province: string;
+  phone?: null;
+  vatNumber?: null;
+  hasMinimalRequiredInfo: boolean;
+}
+
+export interface PaymentDetails {
+  iconUrl?: null;
+  display?: null;
+  instructions?: null;
+}
+export interface Summary {
+  subtotal: number;
+  taxableTotal: number;
+  total: number;
+  payableNow: number;
+  paymentMethod: string;
+  taxes?: null[] | null;
+  discountInducedTaxesVariation: number;
+  adjustedTotal: number;
+  shipping?: null;
+}

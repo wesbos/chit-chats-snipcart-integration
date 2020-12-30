@@ -3,7 +3,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.createShipment = exports.getShipment = exports.getShipments = exports.request = void 0;
+exports.buyShipment = exports.createShipment = exports.getShipment = exports.getShipments = exports.request = void 0;
 const isomorphic_fetch_1 = __importDefault(require("isomorphic-fetch"));
 const dotenv_1 = require("dotenv");
 dotenv_1.config();
@@ -18,7 +18,7 @@ async function request({ endpoint, method = 'GET', clientId = process.env.CHITCH
         throw new Error('No Client ID Provided.');
     }
     const url = `${baseURL}/clients/${clientId}/${endpoint}`;
-    console.log(`Fetching ${url} via a ${method} request`);
+    console.log(`Fetching ${url} via a ${method} request with data ${JSON.stringify(data)}`);
     const response = await isomorphic_fetch_1.default(url, {
         headers: {
             'Content-Type': 'application/json;',
@@ -27,12 +27,18 @@ async function request({ endpoint, method = 'GET', clientId = process.env.CHITCH
         body: method === 'GET' ? undefined : JSON.stringify(data),
         method,
     });
+    if (response.status >= 400 && response.status <= 500) {
+        const { error } = await response.json();
+        throw new Error(error.message);
+    }
     // if (response.status >= 400 && response.status <= 500) {
     //   const res = (await response.json()) as T;
     //   throw new Error(res?.data?.message);
     // }
     // console.dir(response.status, { depth: null });
-    const res = (await response.json());
+    let res;
+    if (json)
+        res = (await response.json());
     return { data: res, headers: response.headers };
     // if (json) {
     // }
@@ -74,6 +80,23 @@ async function createShipment(data) {
     return shipment;
 }
 exports.createShipment = createShipment;
+async function buyShipment(id, postage_type) {
+    const shipment = await request({
+        endpoint: `shipments/${id}/buy`,
+        method: 'PATCH',
+        data: {
+            postage_type,
+        },
+        json: false,
+    });
+    return shipment;
+}
+exports.buyShipment = buyShipment;
+async function go() {
+    const res = await buyShipment('Y69Y6J2M4U', 'chit_chats_us_tracked').catch(console.log);
+    console.dir(res, { depth: null });
+}
+// go();
 // void createShipment({
 //   ...sweden,
 //   description: 'Hand made bracelet',

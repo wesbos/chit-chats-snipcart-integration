@@ -25,7 +25,7 @@ function handleError(err: Error) {
   throw new Error(err.message);
 }
 
-type ErrorMessage = {
+export type ErrorMessage = {
   data?: {
     error?: {
       message: string;
@@ -33,12 +33,12 @@ type ErrorMessage = {
   };
 };
 
-type ChitChatResponse<Data> = {
+export type ChitChatResponse<Data> = {
   data?: Data;
   headers: Headers;
 };
 
-type ShipmentResponse = {
+export type ShipmentResponse = {
   shipment: Shipment;
 };
 
@@ -55,7 +55,9 @@ export async function request<T>({
     throw new Error('No Client ID Provided.');
   }
   const url = `${baseURL}/clients/${clientId}/${endpoint}`;
-  console.log(`Fetching ${url} via a ${method} request`);
+  console.log(
+    `Fetching ${url} via a ${method} request with data ${JSON.stringify(data)}`
+  );
 
   const response: Response = await fetch(url, {
     headers: {
@@ -65,12 +67,18 @@ export async function request<T>({
     body: method === 'GET' ? undefined : JSON.stringify(data),
     method,
   });
+  if (response.status >= 400 && response.status <= 500) {
+    const { error } = await response.json();
+    throw new Error(error.message);
+  }
+
   // if (response.status >= 400 && response.status <= 500) {
   //   const res = (await response.json()) as T;
   //   throw new Error(res?.data?.message);
   // }
   // console.dir(response.status, { depth: null });
-  const res = (await response.json()) as T;
+  let res;
+  if (json) res = (await response.json()) as T;
   return { data: res, headers: response.headers };
   // if (json) {
   // }
@@ -116,6 +124,30 @@ export async function createShipment(
   // console.dir(shipment, { depth: null });
   return shipment;
 }
+
+export async function buyShipment(
+  id: string,
+  postage_type: string
+): Promise<ChitChatResponse<ShipmentResponse>> {
+  const shipment = await request<ShipmentResponse>({
+    endpoint: `shipments/${id}/buy`,
+    method: 'PATCH',
+    data: {
+      postage_type,
+    },
+    json: false,
+  });
+  return shipment;
+}
+
+async function go() {
+  const res = await buyShipment('Y69Y6J2M4U', 'chit_chats_us_tracked').catch(
+    console.log
+  );
+  console.dir(res, { depth: null });
+}
+
+// go();
 
 // void createShipment({
 //   ...sweden,

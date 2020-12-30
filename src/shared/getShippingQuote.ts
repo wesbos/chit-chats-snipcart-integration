@@ -1,3 +1,4 @@
+import { shippingRatesFetch } from './data/shippingrates.fetch';
 import { RatesEntity } from './types/chitchat.d';
 // https://docs.snipcart.com/v3/webhooks/shipping
 
@@ -16,11 +17,11 @@ interface Rate {
   providerType: string;
   cost: number;
   description: string;
-  additionalInfos?: string;
-  currencyCode?: string;
   guaranteedDaysToDelivery: number;
-  deliveredOn?: Date;
-  slug?: string;
+  additionalInfos?: string;
+  // currencyCode?: string;
+  // deliveredOn?: Date;
+  // slug?: string;
 }
 
 interface ShippingRateError {
@@ -29,37 +30,63 @@ interface ShippingRateError {
 }
 
 interface ShippingQuotes {
-  rates?: RatesEntity[] | null;
+  rates?: Rate[] | null;
   errors?: ShippingRateError[];
 }
-export async function getShippingQuotes(): Promise<ShippingQuotes> {
+export async function getShippingQuotes(
+  incomingOrder: any
+): Promise<ShippingQuotes> {
   // A shipping quote is just a create shipment call with postage_type: 'unknown',
+  // const { shippingAddress } = incomingOrder.content;
+
+  console.log(incomingOrder);
+
+  const order = incomingOrder || shippingRatesFetch;
+  const { shippingAddress, items, subtotal } = order.content;
+
+  const totalWeight = items.reduce(
+    (tally: number, item: any) => item.weight + tally,
+    0
+  );
   const res = await createShipment({
     // The User Details
-    name: 'Swedish Fish',
-    address_1: 'Wollmar Yxkullsgatan 10',
-    city: 'Stockholm',
-    province_code: 'Fitzrovia',
-    postal_code: '118 50',
-    country_code: 'SE',
+    name: shippingAddress.fullName,
+    address_1: shippingAddress.address1,
+    address_2: shippingAddress.address2,
+    city: shippingAddress.city,
+    province_code: shippingAddress.province,
+    postal_code: shippingAddress.postalCode,
+    phone: shippingAddress.phone || '',
+    country_code: shippingAddress.country,
     // The Item Details
-    description: 'Hand made bracelet',
-    value: '84.99',
+    description: items[0].name,
+    value: `${subtotal}`,
     value_currency: 'usd',
     package_type: 'parcel',
     package_contents: 'merchandise',
     size_unit: 'cm',
-    size_x: 10,
-    size_y: 5,
-    size_z: 2,
+    size_x: items[0].width,
+    size_y: items[0].height,
+    size_z: items[0].length,
     weight_unit: 'g',
-    weight: 250,
+    weight: totalWeight,
     // The Most Important Parts
     ship_date: 'today',
     postage_type: 'unknown',
   });
 
+  // console.log(res.data?.shipment.rates);
+
+  const rates = res.data?.shipment.rates?.map((rate) => ({
+    cost: parseFloat(rate.payment_amount),
+    description: `${rate.postage_description} --- ${rate.delivery_time_description} --- ${rate.postage_type} --- ${res.data?.shipment.id}`,
+    guaranteedDaysToDelivery: 2,
+    additionalInfos: `${rate.postage_type}--${res.data?.shipment.id}`,
+    shippingProvider: `${rate.postage_type}--${res.data?.shipment.id}`,
+    // providerType: `${rate.postage_type}--${res.data?.shipment.id}`,
+  }));
+
   return {
-    rates: res.data?.shipment.rates,
+    rates,
   };
 }

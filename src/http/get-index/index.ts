@@ -1,5 +1,17 @@
+import data from '@begin/data';
+
 export async function handler(req: object) {
-  console.log('hey');
+  const person = await data.set({
+    table: 'people',
+    name: 'Scott',
+    age: Math.floor(Math.random() * 100),
+  });
+
+  const people = await data.get({
+    table: 'people',
+    limit: 100,
+    begin: 'Scott',
+  });
 
   return {
     headers: {
@@ -8,6 +20,6 @@ export async function handler(req: object) {
         'no-cache, no-store, must-revalidate, max-age=0, s-maxage=0',
     },
     statusCode: 200,
-    body: JSON.stringify({ ok: true }),
+    body: JSON.stringify(people),
   };
 }
