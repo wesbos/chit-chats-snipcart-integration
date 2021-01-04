@@ -1,9 +1,0 @@
-{
-  "name": "begin-app-get-index",
-  "dependencies": {
-    "@architect/functions": "latest",
-    "@begin/data": "latest",
-    "dotenv": "^8.2.0",
-    "isomorphic-fetch": "^3.0.0"
-  }
-}
