@@ -16,7 +16,7 @@ export default function OrdersPage() {
 
 
   return <Layout title="Orders">
-    <Scanner/>
+    {/* <Scanner/> */}
     <header>
       <h1>Orders {orders?.length}</h1>
       <p>Viewing a listing of orders</p>

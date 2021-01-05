@@ -14,7 +14,7 @@ const LabelStyles = styled.div`
   font-family: 'Operator Mono';
   img {
     width: 4in;
-    height: calc(100vh - 70px);
+    /* height: calc(100vh - 70px); */
     /* height: calc(6in - 55px); */
   }
 `;
@@ -36,7 +36,7 @@ function PackingList({order}: {order: SnipCartOrderItem}) {
 
 function ShippingLabel({order}: {order: SnipCartOrderItem}) {
   return <LabelStyles className="label4x6">
-    <QRCode size={50} value={order.token} />
+    {/* <QRCode size={50} value={order.token} /> */}
     <img src="https://staging.chitchats.com/labels/shipments/s2z96i1s18.png" alt=""/>
   </LabelStyles>
 }

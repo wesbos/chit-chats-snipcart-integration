@@ -1,4 +1,4 @@
-import { SnipcartRequestParams } from './../interfaces/snipcart.d';
+import { SnipcartRequestParams, SnipCartProductDefinition } from './../interfaces/snipcart.d';
 import fetch from 'isomorphic-fetch';
 import dotenv from 'dotenv';
 import { SnipCartOrderResponse, SnipCartOrder } from '../interfaces/snipcart';
@@ -11,6 +11,14 @@ const headers = {
     'base64'
   )}`,
 };
+
+export async function getProducts(): Promise<SnipCartProductDefinition[]> {
+  const res = await fetch(`${endpoint}/products`, {
+    headers,
+  });
+  const products = await res.json();
+  return products.items;
+}
 
 export default async function getOrders(params: SnipcartRequestParams): Promise<SnipCartOrder[]> {
   const res = await fetch(`${endpoint}/orders?${new URLSearchParams(params as Record<'key', 'val'>).toString()}`, {

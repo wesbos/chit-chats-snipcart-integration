@@ -11,6 +11,7 @@
   },
   "dependencies": {
     "babel-plugin-styled-components": "^1.12.0",
+    "cors": "^2.8.5",
     "dotenv": "^8.2.0",
     "isomorphic-fetch": "^3.0.0",
     "localtunnel": "^2.0.0",
@@ -26,6 +27,7 @@
     "waait": "^1.0.5"
   },
   "devDependencies": {
+    "@types/cors": "^2.8.9",
     "@types/node": "^14.14.17",
     "@types/qrcode.react": "^1.0.1",
     "@types/react": "^17.0.0",

@@ -268,3 +268,38 @@ export interface SnipcartRequestParams {
   to?: string;
   isRecurringOrder?: boolean;
 }
+
+
+interface MetaData {
+  [key: string]: any;
+}
+
+export default interface SnipCartDimensions {
+  weight: number;
+  width: number;
+  length: number;
+  height: number;
+}
+
+export interface SnipCartProductDefinition {
+  id: string;
+  name: string;
+  price: number;
+  url: string;
+  description: string;
+  image?: string;
+  categories?: any;
+  metadata?: MetaData;
+  fileGuid?: string;
+  quantity?: number;
+  minQuantity?: number;
+  maxQuantity?: number;
+  quantityStep?: number;
+  dimensions?: SnipCartDimensions;
+  customFields?: MetaData;
+  stackable?: "always" | "auto" | "never";
+  shippable?: boolean;
+  hasTaxesIncluded?: boolean;
+  taxable?: boolean;
+  // taxes?: an optional ;? ? ?? ?
+}
