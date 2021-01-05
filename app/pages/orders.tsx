@@ -1,14 +1,9 @@
-import Link from 'next/link'
-import { useMutation, useQuery } from 'react-query'
+import { useQuery } from 'react-query'
 import Layout from '../components/Layout'
-import { SnipCartOrderItem } from '../interfaces/snipcart'
-
-import { Scanner } from '../components/Scanner';
-import { OrderTable } from '../components/OrderTable';
 import { Labels } from '../components/Labels';
 
 export default function OrdersPage() {
-  const { isLoading, error, data: orders, refetch } = useQuery('repoData', () =>
+  const { isLoading, error, data: orders, refetch } = useQuery('orders', () =>
     fetch('/api/orders?limit=100&status=Processed').then(res =>
       res.json()
     )

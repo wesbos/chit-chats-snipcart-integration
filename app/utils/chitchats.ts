@@ -42,6 +42,14 @@ export type ShipmentResponse = {
   shipment: Shipment;
 };
 
+export type SnipCartBatch = {
+  id: number;
+  status:	"ready" | "pending" | "received";
+  created_at: string;
+  label_png_url: string;
+  label_zpl_url: string;
+};
+
 export async function request<T>({
   endpoint,
   method = 'GET',
@@ -145,6 +153,34 @@ export async function buyShipment(
   });
   return shipment;
 }
+
+export async function getBatches(): Promise<ChitChatResponse<SnipCartBatch[]>> {
+  const batches = await request<SnipCartBatch[]>({
+    endpoint: `batches`,
+    method: 'GET',
+    json: true,
+  });
+  return batches;
+}
+
+export async function getBatch(id: number): Promise<ChitChatResponse<SnipCartBatch>> {
+  const batches = await request<SnipCartBatch[]>({
+    endpoint: `batches/${id.toString()}`,
+    method: 'GET',
+    json: true,
+  });
+  return batches;
+}
+
+export async function createBatch(): Promise<ChitChatResponse<SnipCartBatch[]>> {
+  const batch = await request<SnipCartBatch[]>({
+    endpoint: `batches`,
+    method: 'POST',
+    json: false,
+  });
+  return batch;
+}
+
 
 async function go() {
   const res = await buyShipment('Y69Y6J2M4U', 'chit_chats_us_tracked').catch(

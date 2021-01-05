@@ -2,6 +2,7 @@ import React, { ReactNode } from 'react'
 import Link from 'next/link'
 import Head from 'next/head'
 import { createGlobalStyle } from 'styled-components'
+import { ReactQueryDevtools } from 'react-query/devtools'
 import 'normalize.css';
 type Props = {
   children?: ReactNode
@@ -15,6 +16,7 @@ const GlobalStyles = createGlobalStyle`
 
   html {
     box-sizing: border-box;
+    font-family: --apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
   }
   *, &::before, *::after {
     box-sizing: inherit;
@@ -43,25 +45,16 @@ const Layout = ({ children, title = 'This is the default title' }: Props) => (
     </Head>
     <header>
       <nav>
-        <Link href="/">
-          <a>Home</a>
-        </Link>{' '}
-        |{' '}
-        <Link href="/about">
-          <a>About</a>
-        </Link>{' '}
-        |{' '}
-        <Link href="/users">
-          <a>Users List</a>
-        </Link>{' '}
-        | <a href="/api/users">Users API</a>
+        <Link href="/">Home</Link>
+        <Link href="/orders">Orders</Link>
+        <Link href="/batches">Batches</Link>
       </nav>
     </header>
     {children}
     <footer>
-      <hr />
-      <span>I'm here to stay (Footer)</span>
+      {/* ? */}
     </footer>
+    <ReactQueryDevtools initialIsOpen={false} />
   </div>
 )
 

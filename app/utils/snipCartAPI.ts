@@ -20,6 +20,7 @@ export async function getProducts(): Promise<SnipCartProductDefinition[]> {
   return products.items;
 }
 
+
 export default async function getOrders(params: SnipcartRequestParams): Promise<SnipCartOrder[]> {
   const res = await fetch(`${endpoint}/orders?${new URLSearchParams(params as Record<'key', 'val'>).toString()}`, {
     headers,
@@ -33,6 +34,7 @@ export default async function getOrders(params: SnipcartRequestParams): Promise<
   }
   return [];
 }
+
 
 interface MetaData {
   [key: string]: any;
