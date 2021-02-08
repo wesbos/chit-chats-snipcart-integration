@@ -4,6 +4,7 @@ import { useState } from 'react';
 import { useQuery } from 'react-query'
 import { LabelStyles } from '../../components/Labels';
 import Layout from '../../components/Layout'
+import { Scanner } from '../../components/Scanner';
 
 export default function OrdersPage() {
   const { query } = useRouter();
@@ -40,7 +41,7 @@ export default function OrdersPage() {
 
       </LabelStyles>
       )}
-
+    {typeof window !== 'undefined' && <Scanner />}
   </Layout>
 
 }

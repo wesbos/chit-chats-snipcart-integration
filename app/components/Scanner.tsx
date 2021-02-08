@@ -1,37 +1,55 @@
-import dynamic from 'next/dynamic'
+import { useRouter } from 'next/dist/client/router';
 import { useRef, useState } from 'react';
+import styled from 'styled-components';
+import wait from 'waait';
+
+const ScannerStyles = styled.div`
+  position: fixed;
+  width: 100%;
+  top: 0;
+  input {
+    width: 100%;
+    padding: 20px;
+  }
+`
 
 export function Scanner() {
-  const QrReader = dynamic(() => import('react-qr-scanner'));
   const audioRef = useRef<HTMLAudioElement>(null);
+  const router = useRouter();
   const [lastScan, setLastScan] = useState({
     timestamp: 0,
     result: ''
   });
 
-  function handleScan(result) {
+  // const QrReader = useScanner();
+  function handleResult(result: string) {
+    console.log(result);
+    const [type, id] = result.split(':');
+    if(type === 'batch') {
+      router.push(`/batches/${id}`);
+    }
 
-      if (result) {
-        const timeSinceLastScan = Date.now() - lastScan.timestamp;
-        const isSameScanAsLastTime = lastScan.result === result;
-        // prevent double scans, ignore if the last scan was less than 5 seconds ago and this is the same value.
-        if (timeSinceLastScan < 5000 && isSameScanAsLastTime) return;
-        audioRef.current.currentTime = 0;
-        audioRef.current?.play();
-        console.log(result)
-        setLastScan({
-          result: result,
-          timestamp: Date.now()
-        })
-      }
   }
-  return <div>
+  async function handleScan(e: React.FormEvent<HTMLFormElement>) {
+    e.preventDefault();
+    const form = e.currentTarget;
+    const element = e.currentTarget.barcodeValue as HTMLInputElement;
+    const value = element.value;
+    console.log(e.target)
+
+    const [type, id] = value.split(':');
+    if (type === 'batch') {
+      router.push(`/batches/${id}`);
+    }
+    await wait(1000);
+    form.reset();
+  }
+
+  return <ScannerStyles className="no-print">
     <audio ref={audioRef} src="/beep.wav"></audio>
-    <QrReader
-      delay={150}
-      onError={console.error}
-      onScan={handleScan}
-      style={{ width: '100%' }}
-    />
-  </div>
+    <form onSubmit={handleScan}>
+      <input name="barcodeValue" type="text"/>
+
+    </form>
+  </ScannerStyles>
 }
