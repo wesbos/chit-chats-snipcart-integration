@@ -13,10 +13,14 @@
   "eslintConfig": {
     "extends": [
       "wesbos"
-    ]
+    ],
+    "settings": {
+      "import/resolver": {
+        "typescript": {}
+      }
+    }
   },
   "dependencies": {
-    "@syncfusion/ej2-react-barcode-generator": "^18.4.39",
     "cors": "^2.8.5",
     "date-fns": "^2.16.1",
     "dotenv": "^8.2.0",
@@ -24,6 +28,7 @@
     "isomorphic-fetch": "^3.0.0",
     "localtunnel": "^2.0.0",
     "next": "latest",
+    "next-auth": "^3.4.0",
     "normalize.css": "^8.0.1",
     "npm-run-all": "^4.1.5",
     "nprogress": "^0.2.0",
@@ -32,7 +37,7 @@
     "react-dom": "^17.0.1",
     "react-loadable": "^5.5.0",
     "react-qr-scanner": "0.0.11",
-    "react-query": "^3.5.6",
+    "react-query": "^3.8.3",
     "react-table": "^7.6.3",
     "styled-components": "^5.2.1",
     "tualo-datamatrix": "^0.0.1",
@@ -40,6 +45,7 @@
   },
   "devDependencies": {
     "@types/cors": "^2.8.9",
+    "@types/next-auth": "^3.1.24",
     "@types/node": "^14.14.17",
     "@types/nprogress": "^0.2.0",
     "@types/qrcode.react": "^1.0.1",
@@ -55,6 +61,7 @@
     "eslint-config-airbnb-typescript": "^11.4.0",
     "eslint-config-prettier": "^6.15.0",
     "eslint-config-wesbos": "^2.0.0-beta.3",
+    "eslint-import-resolver-typescript": "^2.3.0",
     "eslint-plugin-html": "^6.1.1",
     "eslint-plugin-import": "^2.22.1",
     "eslint-plugin-jsx-a11y": "^6.4.1",

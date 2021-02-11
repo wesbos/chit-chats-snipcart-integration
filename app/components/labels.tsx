@@ -99,6 +99,9 @@ const LabelsGrid = styled.div`
   & > div {
     display: grid;
     grid-template-columns: 1fr 1fr;
+    @media print {
+      display: block;
+    }
   }
 `;
 

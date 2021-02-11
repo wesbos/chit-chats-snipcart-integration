@@ -7,7 +7,6 @@ import 'normalize.css';
 import { useIsFetching } from 'react-query';
 import nProgress from 'nprogress';
 import { Scanner } from './Scanner';
-import ProgressBar from './ProgressBar';
 
 type Props = {
   children?: ReactNode;
@@ -80,6 +79,24 @@ const GlobalStyles = createGlobalStyle`
   tr:nth-child(even) {
     background: var(--backgroundGrey);
   }
+
+  // nprogress
+  #nprogress {
+    @media print {
+      display: none;
+    }
+    .bar {
+      height: 4px;
+      background: var(--yellow);
+    }
+    .peg {
+      box-shadow: 0 0 10px var(--yellow), 0 0 5px var(--yellow);
+    }
+    .spinner-icon {
+      border-top-color: var(--yellow);
+      border-left-color: var(--yellow);
+    }
+  }
 `;
 
 const LayoutStyles = styled.div`
@@ -90,6 +107,11 @@ const LayoutStyles = styled.div`
   margin: 0 auto;
   border: 5px solid var(--black);
   padding: 2rem;
+  @media print {
+    border: 0;
+    min-height: none;
+    padding: 0;
+  }
 `;
 
 const Logo = styled.h1`
@@ -114,8 +136,10 @@ export default function Layout({
   // TODO Hook this up
   const isFetching = useIsFetching();
   if (isFetching) {
+    console.log('Starting progress');
     nProgress.start();
   } else {
+    console.log('ending progress');
     nProgress.done();
   }
 
@@ -123,7 +147,9 @@ export default function Layout({
     <LayoutStyles>
       <GlobalStyles />
       <Head>
-        <title>{title}</title>
+        <title>
+          {isFetching} {title}
+        </title>
         <meta charSet="utf-8" />
         <meta name="viewport" content="initial-scale=1.0, width=device-width" />
       </Head>
@@ -145,7 +171,7 @@ export default function Layout({
       </header>
       <div>{children}</div>
       <footer />
-      <ReactQueryDevtools initialIsOpen={false} />
+      {/* <ReactQueryDevtools initialIsOpen={false} /> */}
     </LayoutStyles>
   );
 }

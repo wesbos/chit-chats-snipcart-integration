@@ -1,6 +1,5 @@
 import { useQuery } from 'react-query';
 import Layout from '../components/Layout';
-import { Labels } from '../components/Labels';
 import { OrderTable } from '../components/OrderTable';
 
 export default function OrdersPage() {

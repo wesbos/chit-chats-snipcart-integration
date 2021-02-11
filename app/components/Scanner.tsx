@@ -37,7 +37,7 @@ function useFocus(ref: React.RefObject<HTMLInputElement>) {
   useEffect(() => {
     const interval = setInterval(() => {
       if(ref?.current) {
-        ref?.current?.focus();
+        // ref?.current?.focus();
       }
     }, 1000);
     return () => clearInterval(interval);
@@ -90,9 +90,12 @@ export function Scanner() {
         fetching: true,
       });
       console.log('DONE!')
+      // play a beep
+      audioRef.current.currentTime = 0;
+      audioRef.current.play();
       nProgress.done();
     }
-    await wait(1000);
+    await wait(100);
     form.reset();
   }
 
