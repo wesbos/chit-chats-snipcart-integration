@@ -124,7 +124,7 @@ const Logo = styled.h1`
 
 const Nav = styled.nav`
   display: grid;
-  grid-template-columns: auto auto auto 1fr;
+  grid-template-columns: auto auto auto auto auto 1fr;
   gap: 1rem;
   align-items: center;
 `;
@@ -166,6 +166,8 @@ export default function Layout({
           <Link href="/">Orders</Link>
           <Link href="/orders">Labels</Link>
           <Link href="/batches">Batches</Link>
+          <Link href="/batches/A">Batch A</Link>
+          <Link href="/batches/B">Batch B</Link>
           <Scanner />
         </Nav>
       </header>

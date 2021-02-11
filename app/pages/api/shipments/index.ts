@@ -7,9 +7,11 @@ export default async function handler(
 ) {
   if (req.method === 'GET') {
     const params = new URLSearchParams(req.query);
-    const shipments = await getShipments({
-      params: `?${params.toString()}`,
-    });
-    res.status(200).json(shipments.data);
+    console.log(req.query);
+    res.status(200).json(
+      Array.from({ length: Math.ceil(Math.random() * 10) }, (_, i) => ({
+        id: `SHIP-${i}-BATCH-${req.query.batch_id}`,
+      }))
+    );
   }
 }

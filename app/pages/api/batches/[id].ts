@@ -6,10 +6,18 @@ export default async function handler(
   req: NextApiRequest,
   res: NextApiResponse
 ) {
-  if (!req.query.id) {
-    res.status(200).json({});
+  if (req.query.id === 'A') {
+    res.status(200).json([
+      { id: 'ASDFASDF', from: 'Batch A' },
+      { id: 'YDFGSDFG', from: 'Batch A' },
+    ]);
     return;
   }
-  const batch = await getBatch(req.query.id);
-  res.status(200).json(batch.data);
+  if (req.query.id === 'B') {
+    res.status(200).json([
+      { id: 'SDFG', from: 'Batch B' },
+      { id: 'ZZZZZ', from: 'Batch B' },
+      { id: 'PPEPRPRP', from: 'Batch B' },
+    ]);
+  }
 }
