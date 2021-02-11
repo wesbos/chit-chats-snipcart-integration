@@ -35,6 +35,14 @@ export default async function getOrders(params: SnipcartRequestParams): Promise<
   return [];
 }
 
+export async function getOrder(orderToken:string): Promise<SnipCartOrder> {
+  const res = await fetch(`${endpoint}/orders/${orderToken}`, {
+    headers,
+  });
+  const order = (await res.json()) as SnipCartOrderResponse;
+  return order;
+}
+
 
 interface MetaData {
   [key: string]: any;

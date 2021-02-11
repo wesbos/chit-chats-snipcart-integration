@@ -167,6 +167,9 @@ export interface ShippingRatesRequest {
   createdOn: string;
   content: Content;
 }
+
+// This is a snipcart interface, no chitchats
+// TODO: Move to own file
 export interface Content {
   vnexT_MigrationFailed: boolean;
   token: string;
@@ -256,6 +259,8 @@ export interface Content {
   ipAddress: string;
   userAgent: string;
   hasSubscriptions: boolean;
+  userDefinedId?: string;
+  shippingRateUserDefinedId?: string;
 }
 export interface BillingAddressOrShippingAddress {
   fullName: string;

@@ -1,14 +1,25 @@
-import { SnipcartRequestParams } from './../../../interfaces/snipcart.d';
 import { NextApiRequest, NextApiResponse } from 'next';
-import { sampleUserData } from '../../../utils/sample-data';
-import getOrders, { updateOrder } from '../../../utils/snipCartAPI';
+import { getOrder, updateOrder } from '../../../utils/snipCartAPI';
 
-export default async function handler(req: NextApiRequest, res: NextApiResponse) {
-  // Start a new group
-  console.groupCollapsed(`Request to ${req.url} at ${new Date().toLocaleTimeString()}`)
+export default async function handler(
+  req: NextApiRequest,
+  res: NextApiResponse
+) {
+  // UPATE
+  if (req.method === 'POST') {
+    const order = await updateOrder(req.query.token, {
+      status: 'Shipped',
+    });
 
-  const order = await updateOrder(req.query.token, { status: 'Shipped'});
-  console.groupEnd();
-
-  res.status(200).json(order)
-};
+    res.status(200).json(order);
+    return;
+  }
+  // READ
+  if (req.method === 'GET') {
+    if (!req.query?.token) {
+      throw new Error('You must specify an order token');
+    }
+    const order = await getOrder(req.query.token);
+    res.status(200).json(order);
+  }
+}

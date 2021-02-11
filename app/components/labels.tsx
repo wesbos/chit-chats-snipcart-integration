@@ -1,23 +1,25 @@
-import { useMutation, useQuery } from 'react-query'
 import QRCode from 'qrcode.react';
-import { SnipCartOrderItem } from "../interfaces/snipcart";
-import  styled from 'styled-components';
+import { Fragment } from 'react';
+import { useMutation } from 'react-query';
+import styled from 'styled-components';
+import { SnipCartOrderItem } from '../interfaces/snipcart';
 
 type OrdersProps = {
-  orders: SnipCartOrderItem[]
-}
+  orders: SnipCartOrderItem[];
+};
 
 const LabelStyles = styled.div`
   width: 4in;
   height: 6in;
-  margin: 20px;
+  margin: 20px 0;
   @media print {
     width: 100%;
     height: 100vh;
     margin: 0;
+    border: 0;
   }
   font-family: 'Operator Mono';
-  border:4px solid black;
+  border: 4px solid black;
   img {
     width: 100%;
     height: 100%;
@@ -33,13 +35,18 @@ const LabelStyles = styled.div`
     grid-template-columns: 1fr auto;
     justify-content: center;
     align-items: center;
-    text-align: center;
+    text-align: left;
     background: black;
     color: white;
     font-style: italic;
     font-size: 15px;
+    padding-left: 20px;
     canvas {
       width: 100%;
+      border: 2px solid white;
+    }
+    h2 {
+      margin: 0;
     }
   }
   ol {
@@ -67,7 +74,8 @@ const LabelStyles = styled.div`
   .meta {
     display: flex;
     font-size: 12px;
-    font-family: --apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+    font-family: --apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen,
+      Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
     gap: 10px;
   }
   &.packing {
@@ -81,55 +89,93 @@ const LabelStyles = styled.div`
       height: 100%;
       min-height: 0;
     }
+    canvas {
+      border: 2px solid white;
+    }
   }
 `;
 
-function PackingList({order}: {order: SnipCartOrderItem}) {
-  const items = [...order.items, ...order.items, ...order.items, ...order.items, ...order.items, ...order.items];
-  return <LabelStyles className="label4x6 packing">
-    <div className="label-header">
-      <h2>Order {order.invoiceNumber}</h2>
-      <QRCode value={order.token} size={65} />
-    </div>
-    <ol>
-      {items.map(item => <li>
-        <h3>{item.name}</h3>
-        <span className="meta">
-          <p><strong>Qty</strong>: {item.quantity}</p>
-          <p>{item.customFields?.map(field => <><strong>{field.name}:</strong> <span>{field.displayValue}</span></>)}</p>
-          <p><strong>ID</strong>: {item.id}</p>
-        </span>
-      </li>)}
-      <h3>{order.numberOfItemsInOrder} Item{order.numberOfItemsInOrder === 1 ? '' : 's'} Total</h3>
-    </ol>
-    <div className="label-footer">
-      <p>Thank You &times; You are a good dev &times; Wes Bos</p>
-    </div>
-  </LabelStyles>
+const LabelsGrid = styled.div`
+  & > div {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+  }
+`;
+
+function PackingList({ order }: { order: SnipCartOrderItem }) {
+  const { items } = order;
+  return (
+    <LabelStyles className="label4x6 packing">
+      <div className="label-header">
+        <h2>
+          Order {order.invoiceNumber}
+          <br />
+          Shipment {order.metadata.chitChatId}
+        </h2>
+        <QRCode value={order.token} size={65} />
+      </div>
+      <ol>
+        {items.map((item, i) => (
+          <li key={`item${i}`}>
+            <h3>{item.name}</h3>
+            <span className="meta">
+              <p>
+                <strong>Qty</strong>: {item.quantity}
+              </p>
+              <p>
+                {item.customFields?.map((field) => (
+                  <Fragment key={`field-item-${i}-${field.name}`}>
+                    <strong>{field.name}:</strong>{' '}
+                    <span>{field.displayValue}</span>
+                  </Fragment>
+                ))}
+              </p>
+              <p>
+                <strong>ID</strong>: {item.id}
+              </p>
+            </span>
+          </li>
+        ))}
+        <h3>
+          {order.numberOfItemsInOrder} Item
+          {order.numberOfItemsInOrder === 1 ? '' : 's'} Total
+        </h3>
+      </ol>
+      <div className="label-footer">
+        <p>Thank You &times; You are a good dev &times; Wes Bos</p>
+      </div>
+    </LabelStyles>
+  );
 }
 
-function ShippingLabel({order}: {order: SnipCartOrderItem}) {
-  return <LabelStyles className="label4x6 shipping">
+function ShippingLabel({ order }: { order: SnipCartOrderItem }) {
+  return (
+    <LabelStyles className="label4x6 shipping">
       <QRCode size={50} value={order.token} />
-      <img src={order?.metadata?.label} alt=""/>
-  </LabelStyles>
+      <img src={order?.metadata?.label} alt="" />
+    </LabelStyles>
+  );
 }
 
 export function Labels({ orders }: OrdersProps) {
-  const mutation = useMutation(({ token }) => fetch(`/api/orders/${token}`, {
-    method: 'POST'
-  }).then(x => x.json()))
+  const mutation = useMutation(({ token }) =>
+    fetch(`/api/orders/${token}`, {
+      method: 'POST',
+    }).then((x) => x.json())
+  );
 
-  if(!orders) return <p>No orders to show</p>
+  if (!orders) return <p>No orders to show</p>;
 
-  return <div className="labels-wrap">
+  return (
+    <LabelsGrid>
       {orders.map((order) => (
-        <>
-          <PackingList order={order}></PackingList>
-          <ShippingLabel order={order}></ShippingLabel>
-        </>
+        <div key={order.token}>
+          <PackingList order={order} />
+          <ShippingLabel order={order} />
+        </div>
       ))}
-  </div>
+    </LabelsGrid>
+  );
 }
 
-export { LabelStyles }
+export { LabelStyles };

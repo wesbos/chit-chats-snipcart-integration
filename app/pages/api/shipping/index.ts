@@ -19,14 +19,8 @@ export default async function handler(
       'There is an existing shipping method, lets check for a shipping ID'
     );
 
-    const [
-      method,
-      timing,
-      shippingMethod,
-      shippingId,
-    ] = shippingRatesRequest.content.shippingMethod.split(' --- ');
+    const shippingId = shippingRatesRequest.content.shippingRateUserDefinedId;
 
-    // TODO Fetch shipping Details from Chitchats or derive it from the request
     if (shippingId) {
       console.log(`There is an existing shipping ID!! ${shippingId}`);
       const shipmentResponse = await getShipment(shippingId);
@@ -34,22 +28,16 @@ export default async function handler(
       rateResponse = {
         rates: convertChitChatRatesToSnipCart(shipmentResponse),
       };
-      console.log('CAched Shipping rates:');
+      console.log('Cached Shipping rates:');
       console.log(rateResponse);
     } else {
       rateResponse = await getShippingQuotes(shippingRatesRequest);
     }
   } else {
     // Get fresh quotes
+    console.log('Fresh Rates')
     rateResponse = await getShippingQuotes(shippingRatesRequest);
   }
-  // console.log(rateResponse);
+  console.log(rateResponse);
   res.status(200).json(rateResponse);
-  // return {
-  //   headers: {
-  //     'Content-Type': 'application/json',
-  //   },
-  //   statusCode: 200,
-  //   body: JSON.stringify(rateResponse),
-  // };
 }

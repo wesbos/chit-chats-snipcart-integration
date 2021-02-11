@@ -4,7 +4,8 @@
   "scripts": {
     "dev": "NODE_OPTIONS='--inspect' next --port 7777",
     "tunnel": "lt -h \"http://serverless.social\" -p 7777 --subdomain wesbosswagx",
-    "all": "npm-run-all dev tunnel",
+    "ngrok": "ngrok http -subdomain=wesbosswagx 7777",
+    "all": "npm-run-all tunnel",
     "build": "next build",
     "start": "next start",
     "type-check": "tsc"
@@ -15,10 +16,11 @@
     ]
   },
   "dependencies": {
-    "babel-plugin-styled-components": "^1.12.0",
+    "@syncfusion/ej2-react-barcode-generator": "^18.4.39",
     "cors": "^2.8.5",
     "date-fns": "^2.16.1",
     "dotenv": "^8.2.0",
+    "emoji-flags": "^1.3.0",
     "isomorphic-fetch": "^3.0.0",
     "localtunnel": "^2.0.0",
     "next": "latest",
@@ -31,7 +33,9 @@
     "react-loadable": "^5.5.0",
     "react-qr-scanner": "0.0.11",
     "react-query": "^3.5.6",
+    "react-table": "^7.6.3",
     "styled-components": "^5.2.1",
+    "tualo-datamatrix": "^0.0.1",
     "waait": "^1.0.5"
   },
   "devDependencies": {
@@ -45,6 +49,7 @@
     "@typescript-eslint/eslint-plugin": "^4.12.0",
     "@typescript-eslint/parser": "^4.12.0",
     "babel-eslint": "^10.1.0",
+    "babel-plugin-styled-components": "^1.12.0",
     "eslint": "^7.17.0",
     "eslint-config-airbnb": "^18.2.1",
     "eslint-config-airbnb-typescript": "^11.4.0",
@@ -59,5 +64,18 @@
     "prettier": "^2.2.1",
     "typescript": "^4.1.3"
   },
-  "license": "MIT"
+  "license": "MIT",
+  "babel": {
+    "presets": [
+      "next/babel"
+    ],
+    "plugins": [
+      [
+        "styled-components",
+        {
+          "ssr": true
+        }
+      ]
+    ]
+  }
 }

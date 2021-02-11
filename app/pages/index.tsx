@@ -1,15 +1,27 @@
-import Link from 'next/link'
-import Layout from '../components/Layout'
+import { useQuery } from 'react-query';
+import Layout from '../components/Layout';
+import { Labels } from '../components/Labels';
+import { OrderTable } from '../components/OrderTable';
 
-const IndexPage = () => (
-  <Layout title="Home | Next.js + TypeScript Example">
-    <h1>Hello Next.js 👋</h1>
-    <p>
-      <Link href="/about">
-        <a>About</a>
-      </Link>
-    </p>
-  </Layout>
-)
+export default function OrdersPage() {
+  const { isLoading, error, data: orders, refetch } = useQuery('orders', () =>
+    fetch('/api/orders?limit=100&status=Processed&status=Shipped').then((res) =>
+      res.json()
+    )
+  );
 
-export default IndexPage
+  return (
+    <Layout title="Orders">
+      {/* <Scanner/> */}
+      <header>
+        <h1>Processed Orders {orders?.length}</h1>
+        <p>
+          Viewing a listing of orders that need to be packed. They are not in a
+          batch.
+        </p>
+      </header>
+      {isLoading && <p>Loading...</p>}
+      <OrderTable orders={orders} />
+    </Layout>
+  );
+}

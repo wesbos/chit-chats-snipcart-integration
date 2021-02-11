@@ -1,15 +1,7 @@
 import { RatesEntity } from '../interfaces/chitchat';
 import { createShipment } from './chitchats';
+import { convertChitChatRatesToSnipCart } from './snipCart';
 // https://docs.snipcart.com/v3/webhooks/shipping
-
-// providerType	"CanadaPost"
-// cost	11.56
-// description	"Canada Post Expedited Parcel"
-// additionalInfos	null
-// currencyCode	null
-// guaranteedDaysToDelivery	2
-// deliveredOn	"2020-12-21T00:00:00Z"
-// slug	"canada-post-expedited-parcel"
 
 interface Rate {
   providerType: string;
@@ -43,7 +35,13 @@ export async function getShippingQuotes(
     (tally: number, item: any) => item.weight + tally,
     0
   );
-  const [MM, DD, YYYY] = new Date().toLocaleString('en-US', { year: 'numeric', month: '2-digit', day: '2-digit' }).split('/')
+  const [MM, DD, YYYY] = new Date()
+    .toLocaleString('en-US', {
+      year: 'numeric',
+      month: '2-digit',
+      day: '2-digit',
+    })
+    .split('/');
   const res = await createShipment({
     // The User Details
     name: shippingAddress.fullName,
@@ -68,24 +66,14 @@ export async function getShippingQuotes(
     weight: totalWeight,
     // The Most Important Parts
     ship_date: `${YYYY}-${MM}-${DD}`,
-    ship_date: `today`,
+    ship_date: `today`, // TODO: Make this flexible for tomorrow. The above should work
     postage_type: 'unknown',
   });
 
-    console.log('-------------');
-    console.log(res);
-    console.log('-------------');
-
   // console.log(res.data?.shipment.rates);
+  const rates = convertChitChatRatesToSnipCart(res);
 
-  const rates = res.data?.shipment.rates?.map((rate) => ({
-    cost: parseFloat(rate.payment_amount),
-    description: `${rate.postage_description} --- ${rate.delivery_time_description} --- ${rate.postage_type} --- ${res.data?.shipment.id}`,
-    guaranteedDaysToDelivery: 2,
-    additionalInfos: `${rate.postage_type}--${res.data?.shipment.id}`,
-    shippingProvider: `${rate.postage_type}--${res.data?.shipment.id}`,
-    // providerType: `${rate.postage_type}--${res.data?.shipment.id}`,
-  }));
+  console.log(rates);
   console.groupEnd();
   return {
     rates,
