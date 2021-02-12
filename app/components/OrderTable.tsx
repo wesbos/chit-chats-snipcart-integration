@@ -1,20 +1,25 @@
-import { useMutation, useQuery } from 'react-query';
 import QRCode from 'qrcode.react';
-import { SnipCartOrderItem } from '../interfaces/snipcart';
+import { useMutation } from 'react-query';
+import { SnipCartOrder } from '../interfaces/snipcart';
 
 type OrdersProps = {
-  orders: SnipCartOrderItem[];
+  orders: SnipCartOrder[];
 };
 
-function generateSnipCartUrl(order: SnipCartOrderItem) {
+interface SnipCartMarkOrderArgs {
+  token: string;
+}
+
+function generateSnipCartUrl(order: SnipCartOrder) {
   return `https://app.snipcart.com/dashboard/orders/${order.token}`;
 }
 
 export function OrderTable({ orders }: OrdersProps) {
-  const mutation = useMutation(({ token }) =>
-    fetch(`/api/orders/${token}`, {
-      method: 'POST',
-    }).then((x) => x.json())
+  const mutation = useMutation<SnipCartOrder, any, SnipCartMarkOrderArgs>(
+    ({ token }) =>
+      fetch(`/api/orders/${token}`, {
+        method: 'POST',
+      }).then((x) => x.json())
   );
 
   if (!orders) return <p>No orders to show</p>;
@@ -62,9 +67,6 @@ export function OrderTable({ orders }: OrdersProps) {
                 onClick={async () => {
                   console.log('Marking as shipped');
                   await mutation.mutateAsync({ token: order.token });
-                  console.log('refecthing');
-                  await refetch();
-                  console.log('done');
                 }}
               >
                 Mark{mutation.isLoading && 'ing'} as Shipped

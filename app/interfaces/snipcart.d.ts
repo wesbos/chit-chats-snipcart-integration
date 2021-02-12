@@ -1,3 +1,10 @@
+export interface SnipCartOrdersResponse {
+  items?: SnipCartOrder[];
+  totalItems: number;
+  offset: number;
+  limit: number;
+}
+
 export interface SnipCartOrderResponse {
   items?: SnipCartOrder[];
   status?: null;
@@ -95,11 +102,11 @@ export interface SnipCartOrder {
   total: number;
   totalWeight: number;
   totalRebateRate: number;
-  customFields?: null[] | null;
+  customFields?: SnipCartCustomField[];
   shippingEnabled: boolean;
   numberOfItemsInOrder: number;
   paymentTransactionId: string;
-  metadata?: null;
+  metadata?: MetaData;
   taxesTotal: number;
   itemsCount: number;
   summary: Summary;
@@ -137,17 +144,22 @@ export interface SnipCartOrderItem {
   width: number;
   height: number;
   length: number;
-  metadata?: null;
+  metadata?: MetaData;
   __VNEXT_OrderId: number;
   totalPrice: number;
   totalWeight: number;
   taxes?: null[] | null;
   alternatePrices: AlternatePricesOrValidationErrors;
-  customFields?: null[] | null;
+  customFields?: SnipCartCustomField[];
   unitPrice: number;
   hasDimensions: boolean;
   hasTaxesIncluded: boolean;
   totalPriceWithoutDiscountsAndTaxes: number;
+}
+
+export interface SnipCartCustomField {
+  name: string;
+  displayValue: string;
 }
 export interface PaymentSchedule {
   interval: number;
@@ -260,7 +272,14 @@ export interface SnipcartShipmentRate {
 export interface SnipcartRequestParams {
   offset?: number;
   limit?: number;
-  status?: 'InProgress' | 'Processed' | 'Disputed' | 'Shipped' | 'Delivered' | 'Pending' | 'Cancelled';
+  status?:
+    | 'InProgress'
+    | 'Processed'
+    | 'Disputed'
+    | 'Shipped'
+    | 'Delivered'
+    | 'Pending'
+    | 'Cancelled';
   invoiceNumber?: string;
   productId?: string;
   placedBy?: string;
@@ -269,12 +288,11 @@ export interface SnipcartRequestParams {
   isRecurringOrder?: boolean;
 }
 
-
 interface MetaData {
   [key: string]: any;
 }
 
-export default interface SnipCartDimensions {
+export interface SnipCartDimensions {
   weight: number;
   width: number;
   length: number;
@@ -296,10 +314,9 @@ export interface SnipCartProductDefinition {
   maxQuantity?: number;
   quantityStep?: number;
   dimensions?: SnipCartDimensions;
-  customFields?: MetaData;
-  stackable?: "always" | "auto" | "never";
+  customFields?: MetaData[];
+  stackable?: 'always' | 'auto' | 'never';
   shippable?: boolean;
   hasTaxesIncluded?: boolean;
   taxable?: boolean;
-  // taxes?: an optional ;? ? ?? ?
 }

@@ -260,7 +260,7 @@ export interface Content {
   userAgent: string;
   hasSubscriptions: boolean;
   userDefinedId?: string;
-  shippingRateUserDefinedId?: string;
+  shippingRateUserDefinedId: string;
 }
 export interface BillingAddressOrShippingAddress {
   fullName: string;
@@ -294,4 +294,17 @@ export interface Summary {
   discountInducedTaxesVariation: number;
   adjustedTotal: number;
   shipping?: null;
+}
+
+export interface ChitChatsBatch {
+  id: number;
+  status: 'received' | 'ready' | 'pending';
+  created_at: string;
+  label_png_url: string;
+  label_zpl_url: string;
+}
+
+export interface BatchRequest {
+  batchId: string;
+  shipmentIds: string[];
 }

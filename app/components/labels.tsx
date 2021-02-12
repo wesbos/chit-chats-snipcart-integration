@@ -1,11 +1,10 @@
 import QRCode from 'qrcode.react';
 import { Fragment } from 'react';
-import { useMutation } from 'react-query';
 import styled from 'styled-components';
-import { SnipCartOrderItem } from '../interfaces/snipcart';
+import { SnipCartOrder } from '../interfaces/snipcart';
 
 type OrdersProps = {
-  orders: SnipCartOrderItem[];
+  orders: SnipCartOrder[];
 };
 
 const LabelStyles = styled.div`
@@ -23,8 +22,6 @@ const LabelStyles = styled.div`
   img {
     width: 100%;
     height: 100%;
-    /* height: calc(100vh - 70px); */
-    /* height: calc(6in - 55px); */
   }
   p {
     margin: 0;
@@ -105,7 +102,7 @@ const LabelsGrid = styled.div`
   }
 `;
 
-function PackingList({ order }: { order: SnipCartOrderItem }) {
+function PackingList({ order }: { order: SnipCartOrder }) {
   const { items } = order;
   return (
     <LabelStyles className="label4x6 packing">
@@ -113,12 +110,12 @@ function PackingList({ order }: { order: SnipCartOrderItem }) {
         <h2>
           Order {order.invoiceNumber}
           <br />
-          Shipment {order.metadata.chitChatId}
+          Shipment {order?.metadata?.chitChatId}
         </h2>
         <QRCode value={order.token} size={65} />
       </div>
       <ol>
-        {items.map((item, i) => (
+        {items?.map((item, i) => (
           <li key={`item${i}`}>
             <h3>{item.name}</h3>
             <span className="meta">
@@ -151,7 +148,7 @@ function PackingList({ order }: { order: SnipCartOrderItem }) {
   );
 }
 
-function ShippingLabel({ order }: { order: SnipCartOrderItem }) {
+function ShippingLabel({ order }: { order: SnipCartOrder }) {
   return (
     <LabelStyles className="label4x6 shipping">
       <QRCode size={50} value={order.token} />
@@ -161,14 +158,7 @@ function ShippingLabel({ order }: { order: SnipCartOrderItem }) {
 }
 
 export function Labels({ orders }: OrdersProps) {
-  const mutation = useMutation(({ token }) =>
-    fetch(`/api/orders/${token}`, {
-      method: 'POST',
-    }).then((x) => x.json())
-  );
-
   if (!orders) return <p>No orders to show</p>;
-
   return (
     <LabelsGrid>
       {orders.map((order) => (

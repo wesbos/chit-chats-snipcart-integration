@@ -44,8 +44,11 @@ export function Scanner() {
   const queryClient = useQueryClient();
 
   async function handleScan(e: React.FormEvent<HTMLFormElement>) {
-    const batchId: string = router.query.batchId;
     e.preventDefault();
+    const batchId = Array.isArray(router.query.batchId) ? router.query.batchId[0] : router.query.batchId;
+    if(!batchId) {
+      throw new Error('No Batch ID Present')
+    }
     nProgress.start();
     const form = e.currentTarget;
     const element = e.currentTarget.barcodeValue as HTMLInputElement;
@@ -63,13 +66,12 @@ export function Scanner() {
       const { chitChatId } = order.metadata;
       console.log('Got the Chit Chat ID: ', chitChatId);
       // 2. Add to Chit Chat batch
-      const res = await batchMutation.mutateAsync({
+      await batchMutation.mutateAsync({
         batch_id: batchId,
         shipment_ids: [chitChatId]
-      }).catch(err => {
+      }).catch(() => {
         console.log('That one didnt work');
       });
-      console.log(res);
       // 3. Refresh the orders in this batch
       console.log('Refreshing the batch', batchId)
       await queryClient.refetchQueries(['shipments-in-batch', batchId]);
@@ -81,8 +83,10 @@ export function Scanner() {
       }).then((res) => res.json())
       console.log(updatedOrder)
       // play a beep
-      audioRef.current.currentTime = 0;
-      audioRef.current.play();
+      if(audioRef.current) {
+        audioRef.current.currentTime = 0;
+        audioRef.current.play();
+      }
       nProgress.done();
     }
     await wait(100);

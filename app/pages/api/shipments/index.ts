@@ -4,7 +4,7 @@ import { withAuth } from '../../../utils/withAuth';
 
 async function handler(req: NextApiRequest, res: NextApiResponse) {
   if (req.method === 'GET') {
-    const params = new URLSearchParams(req.query);
+    const params = new URLSearchParams(req.query as any);
     const shipments = await getShipments({
       params: `?${params.toString()}`,
     });

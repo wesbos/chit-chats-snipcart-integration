@@ -7,6 +7,7 @@ import { updateOrder } from '../../../utils/snipCartAPI';
 
 interface SnipCartWebhookBody {
   eventName: string;
+  content: Content;
 }
 
 export default async function handler(
@@ -22,10 +23,10 @@ export default async function handler(
   // console.log(req);
   if (body.eventName === 'order.completed') {
     console.log('buying Shipment!');
-    const content = body.content as Content;
+    const content = body.content;
     const [
-      method,
-      timing,
+      , // method, unused
+      , // timing, unused
       shippingMethod,
     ] = content.shippingMethod.split(' --- ');
     const shippingId = content.shippingRateUserDefinedId;
@@ -38,7 +39,7 @@ export default async function handler(
     // Fetch the shipment Info
     console.log('fetching shipment');
     const { data } = await getShipment(shippingId);
-    const { shipment } = data;
+    const shipment = data?.shipment;
     console.log('Updating Shipment data in Snipcart');
     const updatedOrder = await updateOrder(body.content.token, {
       trackingNumber: shipment?.carrier_tracking_code,

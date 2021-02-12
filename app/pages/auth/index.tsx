@@ -1,13 +1,17 @@
-import { providers, signIn, signOut, useSession } from 'next-auth/client';
+import { providers, signIn } from 'next-auth/client';
+import { Providers } from 'next-auth/providers';
 
-export default function SignIn({ providers }) {
-  const [session, loading] = useSession();
+type SignInProps = {
+  providers: Providers;
+};
+
+export default function SignIn({ providers: availableProviders }: SignInProps) {
   return (
     <div>
       <p>hey</p>
-      {Object.values(providers).map((provider) => (
+      {Object.values(availableProviders).map((provider) => (
         <div key={provider.name}>
-          <button onClick={() => signIn(provider.id)}>
+          <button type="button" onClick={() => signIn(provider.id)}>
             Sign in with {provider.name}
           </button>
         </div>
@@ -16,6 +20,6 @@ export default function SignIn({ providers }) {
   );
 }
 
-SignIn.getInitialProps = async (context) => ({
-  providers: await providers(context),
+SignIn.getInitialProps = async () => ({
+  providers: await providers(),
 });

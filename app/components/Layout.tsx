@@ -2,7 +2,6 @@ import React, { ReactNode } from 'react';
 import Link from 'next/link';
 import Head from 'next/head';
 import styled, { createGlobalStyle } from 'styled-components';
-import { ReactQueryDevtools } from 'react-query/devtools';
 import 'normalize.css';
 import { useIsFetching } from 'react-query';
 import nProgress from 'nprogress';

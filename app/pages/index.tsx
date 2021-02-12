@@ -3,7 +3,7 @@ import Layout from '../components/Layout';
 import { OrderTable } from '../components/OrderTable';
 
 export default function OrdersPage() {
-  const { isLoading, error, data: orders, refetch } = useQuery('orders', () =>
+  const { isLoading, data: orders } = useQuery('orders', () =>
     fetch('/api/orders?limit=100&status=Processed').then((res) => res.json())
   );
 

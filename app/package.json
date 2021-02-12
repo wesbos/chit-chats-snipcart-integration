@@ -17,6 +17,10 @@
       "import/resolver": {
         "typescript": {}
       }
+    },
+    "rules": {
+      "no-use-before-define": 0,
+      "react/jsx-props-no-spreading": 0
     }
   },
   "dependencies": {
@@ -35,7 +39,6 @@
     "react": "^17.0.1",
     "react-dom": "^17.0.1",
     "react-loadable": "^5.5.0",
-    "react-qr-scanner": "0.0.11",
     "react-query": "^3.8.3",
     "react-table": "^7.6.3",
     "styled-components": "^5.2.1",
@@ -44,6 +47,7 @@
   },
   "devDependencies": {
     "@types/cors": "^2.8.9",
+    "@types/isomorphic-fetch": "^0.0.35",
     "@types/next-auth": "^3.1.24",
     "@types/node": "^14.14.17",
     "@types/nprogress": "^0.2.0",

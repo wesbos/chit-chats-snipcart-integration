@@ -5,20 +5,16 @@ import { useQuery } from 'react-query';
 import GenericTable from '../../components/GenericTable';
 import { LabelStyles } from '../../components/Labels';
 import Layout from '../../components/Layout';
-import { Scanner } from '../../components/Scanner';
 import useBatch from '../../hooks/useBatch';
 
 export default function OrdersPage() {
   const { query } = useRouter();
-
-  const { isLoading, error, data = {}, refetch } = useQuery(
-    ['batch', query.batchId],
-    () => {
-      if (!query.batchId) return; // wait for router..
-      return fetch(`/api/batches/${query.batchId}`).then((res) => res.json());
-    }
-  );
-  const { shipments, refetchBatches } = useBatch(query.batchId);
+  const { batchId } = query;
+  const { isLoading, data = {} } = useQuery(['batch', batchId], () => {
+    if (!batchId) return; // wait for router..
+    return fetch(`/api/batches/${batchId}`).then((res) => res.json());
+  });
+  const { shipments } = useBatch(batchId);
   const { batch = {} } = data;
   const [labelShow, setLabelShow] = useState('batch-scanner');
   return (
@@ -26,7 +22,7 @@ export default function OrdersPage() {
       <header>
         ˜
         <h1>
-          Batch {query.batchId} {labelShow}
+          Batch {batchId} {labelShow}
         </h1>
         <div className="no-print">
           <h2>
@@ -38,20 +34,22 @@ export default function OrdersPage() {
             columns={['id', 'status', 'to_name', 'to_city', 'to_country_code']}
           />
         </div>
-        <label>
+        <label htmlFor="batch-scanner">
           <input
             type="radio"
             name="batch"
             value="batch-scanner"
+            id="batch-scanner"
             onChange={(e) => setLabelShow(e.target.value)}
           />
           Batch Scanner Label
         </label>
-        <label>
+        <label htmlFor="batch-finished">
           <input
             type="radio"
             name="batch"
             value="batch-finished"
+            id="batch-finished"
             onChange={(e) => setLabelShow(e.target.value)}
           />
           Batch Finished Label
@@ -60,17 +58,14 @@ export default function OrdersPage() {
       {isLoading && <p>Loading...</p>}
       {labelShow === 'batch-scanner' && (
         <LabelStyles>
-          <QRCode size={150} value={`batch:${query.batchId}`} />
-          <p>Chit Chats Client Batch:{query.batchId}</p>
+          <QRCode size={150} value={`batch:${batchId}`} />
+          <p>Chit Chats Client Batch:{batchId}</p>
         </LabelStyles>
       )}
       {labelShow === 'batch-finished' && (
         <LabelStyles>
           {batch.label_png_url ? (
-            <img
-              src={batch.label_png_url}
-              alt={`Label for Batch ${query.batchId}`}
-            />
+            <img src={batch.label_png_url} alt={`Label for Batch ${batchId}`} />
           ) : (
             'Label not yet created. You probably have to add items to this batch first'
           )}

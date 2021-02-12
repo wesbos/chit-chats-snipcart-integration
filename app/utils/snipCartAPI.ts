@@ -1,7 +1,7 @@
-import { SnipcartRequestParams, SnipCartProductDefinition } from './../interfaces/snipcart.d';
-import fetch from 'isomorphic-fetch';
 import dotenv from 'dotenv';
-import { SnipCartOrderResponse, SnipCartOrder } from '../interfaces/snipcart';
+import fetch from 'isomorphic-fetch';
+import { SnipCartOrder } from '../interfaces/snipcart';
+import { SnipCartOrdersResponse, SnipCartProductDefinition, SnipcartRequestParams } from './../interfaces/snipcart.d';
 
 dotenv.config();
 const endpoint = 'https://app.snipcart.com/api';
@@ -22,10 +22,12 @@ export async function getProducts(): Promise<SnipCartProductDefinition[]> {
 
 
 export default async function getOrders(params: SnipcartRequestParams): Promise<SnipCartOrder[]> {
-  const res = await fetch(`${endpoint}/orders?${new URLSearchParams(params as Record<'key', 'val'>).toString()}`, {
+  const y = params as URLSearchParams;
+  const paramsString = new URLSearchParams(y).toString();
+  const res = await fetch(`${endpoint}/orders?${paramsString}`, {
     headers,
   });
-  const { items: orders } = (await res.json()) as SnipCartOrderResponse;
+  const { items: orders } = (await res.json()) as SnipCartOrdersResponse;
   // await fs.writeFileSync('./order-items.json', JSON.stringify(data));
   // console.dir(data, { depth: null });
   if (orders?.length) {
@@ -39,7 +41,7 @@ export async function getOrder(orderToken:string): Promise<SnipCartOrder> {
   const res = await fetch(`${endpoint}/orders/${orderToken}`, {
     headers,
   });
-  const order = (await res.json()) as SnipCartOrderResponse;
+  const order = (await res.json()) as SnipCartOrder;
   return order;
 }
 

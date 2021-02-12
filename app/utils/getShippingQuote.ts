@@ -1,18 +1,6 @@
-import { RatesEntity } from '../interfaces/chitchat';
+import { SnipcartShipmentRate } from '../interfaces/snipcart.d';
 import { createShipment } from './chitchats';
 import { convertChitChatRatesToSnipCart } from './snipCart';
-// https://docs.snipcart.com/v3/webhooks/shipping
-
-interface Rate {
-  providerType: string;
-  cost: number;
-  description: string;
-  guaranteedDaysToDelivery: number;
-  additionalInfos?: string;
-  // currencyCode?: string;
-  // deliveredOn?: Date;
-  // slug?: string;
-}
 
 interface ShippingRateError {
   key: string;
@@ -20,7 +8,7 @@ interface ShippingRateError {
 }
 
 interface ShippingQuotes {
-  rates?: Rate[] | null;
+  rates?: SnipcartShipmentRate[] | null;
   errors?: ShippingRateError[];
 }
 export async function getShippingQuotes(
@@ -35,13 +23,13 @@ export async function getShippingQuotes(
     (tally: number, item: any) => item.weight + tally,
     0
   );
-  const [MM, DD, YYYY] = new Date()
-    .toLocaleString('en-US', {
-      year: 'numeric',
-      month: '2-digit',
-      day: '2-digit',
-    })
-    .split('/');
+  // const [MM, DD, YYYY] = new Date()
+  //   .toLocaleString('en-US', {
+  //     year: 'numeric',
+  //     month: '2-digit',
+  //     day: '2-digit',
+  //   })
+  //   .split('/');
   const res = await createShipment({
     // The User Details
     name: shippingAddress.fullName,
@@ -65,15 +53,12 @@ export async function getShippingQuotes(
     weight_unit: 'g',
     weight: totalWeight,
     // The Most Important Parts
-    ship_date: `${YYYY}-${MM}-${DD}`,
+    // ship_date: `${YYYY}-${MM}-${DD}`,
     ship_date: `today`, // TODO: Make this flexible for tomorrow. The above should work
     postage_type: 'unknown',
   });
 
-  // console.log(res.data?.shipment.rates);
   const rates = convertChitChatRatesToSnipCart(res);
-
-  console.log(rates);
   console.groupEnd();
   return {
     rates,
