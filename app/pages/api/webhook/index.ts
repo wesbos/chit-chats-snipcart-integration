@@ -14,7 +14,9 @@ export default async function handler(
   res: NextApiResponse
 ): Promise<void> {
   console.group('Webhook Request');
-  // Todo: Auth Snipcart webhook
+  // Todo: Auth Snipcart webhook with X-Snipcart-RequestToken Header
+  // https://app.snipcart.com/api/requestvalidation/{token}
+
   const body = req.body as SnipCartWebhookBody;
   console.log(`Incoming Webhook: ${body.eventName}`);
   // console.log(req);

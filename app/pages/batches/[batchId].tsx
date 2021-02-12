@@ -10,23 +10,15 @@ import useBatch from '../../hooks/useBatch';
 
 export default function OrdersPage() {
   const { query } = useRouter();
-  const [batchIdTemp, setBatchIdTemp] = useState();
+
   const { isLoading, error, data = {}, refetch } = useQuery(
-    ['batch', batchIdTemp],
+    ['batch', query.batchId],
     () => {
-      if (!batchIdTemp) return; // wait for router..
-      return fetch(`/api/batches/${batchIdTemp}`).then((res) => res.json());
-    },
-    {
-      // refetchInterval: 1000,
+      if (!query.batchId) return; // wait for router..
+      return fetch(`/api/batches/${query.batchId}`).then((res) => res.json());
     }
   );
-  console.log(query.batchId);
-  // const { data: batches = [], refetch: refetchBatches } = useQuery(
-  //   ['shipments-in-batch', query.batchId],
-  //   () => fetch(`/api/shipments?batch_id=${query.batchId}`).then((res) => res.json())
-  // );
-  const { shipments, refetchBatches } = useBatch(batchIdTemp);
+  const { shipments, refetchBatches } = useBatch(query.batchId);
   const { batch = {} } = data;
   const [labelShow, setLabelShow] = useState('batch-scanner');
   return (
@@ -35,13 +27,7 @@ export default function OrdersPage() {
         ˜
         <h1>
           Batch {query.batchId} {labelShow}
-          temp: {batchIdTemp}
         </h1>
-        <input
-          type="text"
-          value={batchIdTemp}
-          onChange={(e) => setBatchIdTemp(e.target.value)}
-        />
         <div className="no-print">
           <h2>
             {shipments.length} Package{shipments.length !== 1 && 's'} in this

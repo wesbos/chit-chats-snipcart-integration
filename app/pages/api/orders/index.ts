@@ -1,9 +1,10 @@
-import { SnipcartRequestParams } from './../../../interfaces/snipcart.d';
 import { NextApiRequest, NextApiResponse } from 'next';
-import { sampleUserData } from '../../../utils/sample-data';
 import getOrders from '../../../utils/snipCartAPI';
+import { withAuth } from '../../../utils/withAuth';
 
-export default async function handler(req: NextApiRequest, res: NextApiResponse) {
-  const orders = await getOrders(req.query as SnipcartRequestParams);
+async function handler(req: NextApiRequest, res: NextApiResponse) {
+  const orders = await getOrders(req.query);
   res.status(200).json(orders);
-};
+}
+
+export default withAuth(handler);

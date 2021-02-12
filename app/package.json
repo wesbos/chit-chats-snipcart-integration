@@ -2,8 +2,7 @@
   "name": "swag-fulfilment",
   "version": "1.0.0",
   "scripts": {
-    "dev": "NODE_OPTIONS='--inspect' next --port 7777",
-    "tunnel": "lt -h \"http://serverless.social\" -p 7777 --subdomain wesbosswagx",
+    "dev": "next --port 7777",
     "ngrok": "ngrok http -subdomain=wesbosswagx 7777",
     "all": "npm-run-all tunnel",
     "build": "next build",

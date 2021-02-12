@@ -1,13 +1,12 @@
 import { NextApiRequest, NextApiResponse } from 'next';
 import { getOrder, updateOrder } from '../../../utils/snipCartAPI';
+import { withAuth } from '../../../utils/withAuth';
 
-export default async function handler(
-  req: NextApiRequest,
-  res: NextApiResponse
-) {
-  // UPATE
+async function handler(req: NextApiRequest, res: NextApiResponse) {
+  // Update Order. Mark as shipped
   if (req.method === 'POST') {
     const order = await updateOrder(req.query.token, {
+      // This should probably be sent from the query
       status: 'Shipped',
     });
 
@@ -23,3 +22,5 @@ export default async function handler(
     res.status(200).json(order);
   }
 }
+
+export default withAuth(handler);

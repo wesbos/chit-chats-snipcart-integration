@@ -6,6 +6,7 @@ import { ReactQueryDevtools } from 'react-query/devtools';
 import 'normalize.css';
 import { useIsFetching } from 'react-query';
 import nProgress from 'nprogress';
+import { useSession } from 'next-auth/client';
 import { Scanner } from './Scanner';
 
 type Props = {
@@ -133,7 +134,6 @@ export default function Layout({
   children,
   title = 'This is the default title',
 }: Props) {
-  // TODO Hook this up
   const isFetching = useIsFetching();
   if (isFetching) {
     console.log('Starting progress');
@@ -142,7 +142,17 @@ export default function Layout({
     console.log('ending progress');
     nProgress.done();
   }
-
+  const [session, loading] = useSession();
+  if (loading) return <p>Loading..</p>;
+  // dont worry we also lock down the data in the API endpoints, this is just visual.
+  if (!session)
+    return (
+      <div>
+        <Link href="/auth">
+          <a>Login</a>
+        </Link>
+      </div>
+    );
   return (
     <LayoutStyles>
       <GlobalStyles />
@@ -171,7 +181,6 @@ export default function Layout({
       </header>
       <div>{children}</div>
       <footer />
-      {/* <ReactQueryDevtools initialIsOpen={false} /> */}
     </LayoutStyles>
   );
 }

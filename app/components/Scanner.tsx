@@ -1,10 +1,11 @@
 import { useRouter } from 'next/dist/client/router';
 import nProgress from 'nprogress';
-import { useEffect, useRef, useState } from 'react';
+import { useRef, useState } from 'react';
 import { useQueryClient } from 'react-query';
 import styled from 'styled-components';
 import wait from 'waait';
 import { useAddToBatch } from '../hooks/useBatch';
+import { useFocus } from '../hooks/useFocus';
 
 
 
@@ -33,17 +34,6 @@ const ScannerStyles = styled.div`
   }
 `;
 
-function useFocus(ref: React.RefObject<HTMLInputElement>) {
-  useEffect(() => {
-    const interval = setInterval(() => {
-      if(ref?.current) {
-        // ref?.current?.focus();
-      }
-    }, 1000);
-    return () => clearInterval(interval);
-  }, [ref]);
-}
-
 export function Scanner() {
   const audioRef = useRef<HTMLAudioElement>(null);
   const inputRef = useRef<HTMLInputElement>(null);
@@ -67,7 +57,7 @@ export function Scanner() {
     else if (/* action === 'ship' &&  */ router.query.batchId) {
 
       console.log('GOTTA SHIP IT', {value, batchId})
-      // 1. Get shipment from ChitChats
+      // 1. Get shipment from Snipcart
       const order = await fetch(`/api/orders/${value}`).then((res) => res.json())
       // from the Snipcart order we get the Chit Chat ID
       const { chitChatId } = order.metadata;
@@ -82,14 +72,14 @@ export function Scanner() {
       console.log(res);
       // 3. Refresh the orders in this batch
       console.log('Refreshing the batch', batchId)
-      window.queryClient = queryClient;
-      await queryClient.refetchQueries(['shipments-in-batch', batchId], {
-        active: true,
-        inactive: true,
-        stale: true,
-        fetching: true,
-      });
+      await queryClient.refetchQueries(['shipments-in-batch', batchId]);
       console.log('DONE!')
+      // 4. Mark it as shipped in Snipcart
+      console.log('Marking as shipped in Snipcart')
+      const updatedOrder = await fetch(`/api/orders/${value}`, {
+        method: 'POST'
+      }).then((res) => res.json())
+      console.log(updatedOrder)
       // play a beep
       audioRef.current.currentTime = 0;
       audioRef.current.play();

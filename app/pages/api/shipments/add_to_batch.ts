@@ -1,10 +1,8 @@
 import { NextApiRequest, NextApiResponse } from 'next';
 import { addToBatch, getShipments } from '../../../utils/chitchats';
+import { withAuth } from '../../../utils/withAuth';
 
-export default async function handler(
-  req: NextApiRequest,
-  res: NextApiResponse
-) {
+async function handler(req: NextApiRequest, res: NextApiResponse) {
   console.log(req.body);
   const body = JSON.parse(req.body);
   const batchResponse = await addToBatch(req.body);
@@ -12,3 +10,5 @@ export default async function handler(
     message: `Added ${body.shipment_ids} to Batch ${body.batch_id}`,
   });
 }
+
+export default withAuth(handler);

@@ -1,8 +1,10 @@
-import { providers, signIn } from 'next-auth/client';
+import { providers, signIn, signOut, useSession } from 'next-auth/client';
 
 export default function SignIn({ providers }) {
+  const [session, loading] = useSession();
   return (
-    <>
+    <div>
+      <p>hey</p>
       {Object.values(providers).map((provider) => (
         <div key={provider.name}>
           <button onClick={() => signIn(provider.id)}>
@@ -10,7 +12,7 @@ export default function SignIn({ providers }) {
           </button>
         </div>
       ))}
-    </>
+    </div>
   );
 }
 

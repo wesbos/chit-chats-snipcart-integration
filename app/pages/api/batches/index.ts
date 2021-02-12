@@ -1,8 +1,9 @@
 import { SnipcartRequestParams } from './../../../interfaces/snipcart.d';
 import { NextApiRequest, NextApiResponse } from 'next';
 import { createBatch, getBatches } from '../../../utils/chitchats';
+import { withAuth } from '../../../utils/withAuth';
 
-export default async function handler(req: NextApiRequest, res: NextApiResponse) {
+async function handler(req: NextApiRequest, res: NextApiResponse) {
   if(req.method === 'GET') {
     const batches = await getBatches(req.query as SnipcartRequestParams);
     res.status(200).json(batches.data);
@@ -17,3 +18,5 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
   }
 
 };
+
+export default withAuth(handler);

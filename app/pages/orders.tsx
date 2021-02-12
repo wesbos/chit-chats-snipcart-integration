@@ -10,7 +10,6 @@ export default function OrdersPage() {
 
   return (
     <Layout title="Orders">
-      {/* <Scanner/> */}
       <header>
         <h1>Processed Orders {orders?.length}</h1>
         <p>
@@ -20,7 +19,6 @@ export default function OrdersPage() {
       </header>
       {isLoading && <p>Loading...</p>}
       <Labels orders={orders} />
-      {/* <OrderTable orders={orders}/> */}
     </Layout>
   );
 }
