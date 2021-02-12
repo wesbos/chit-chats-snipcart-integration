@@ -1,7 +1,7 @@
 import NextAuth from 'next-auth';
 import Providers from 'next-auth/providers';
 
-const handler = NextAuth(
+export default NextAuth(
   // @ts-ignore Types are coming https://github.com/nextauthjs/next-auth/pull/1223/files
   {
     providers: [
@@ -13,5 +13,3 @@ const handler = NextAuth(
   },
   {}
 );
-
-export default handler;
