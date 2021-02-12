@@ -1,6 +1,6 @@
 import { useRouter } from 'next/dist/client/router';
 import nProgress from 'nprogress';
-import { useRef, useState } from 'react';
+import { ChangeEvent, useRef, useState } from 'react';
 import { useQueryClient } from 'react-query';
 import styled from 'styled-components';
 import wait from 'waait';
@@ -93,7 +93,7 @@ export function Scanner() {
     form.reset();
   }
 
-  function handleChange(e) {
+  function handleChange(e: ChangeEvent<HTMLInputElement>) {
     setAction(e.target.value);
   }
   return (

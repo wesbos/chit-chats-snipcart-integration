@@ -1,5 +1,4 @@
 import { NextApiRequest, NextApiResponse } from 'next';
-import { SnipcartRequestParams } from '../../../interfaces/snipcart.d';
 import { getBatch } from '../../../utils/chitchats';
 import { withAuth } from '../../../utils/withAuth';
 
@@ -8,7 +7,8 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
     res.status(200).json({});
     return;
   }
-  const batch = await getBatch(req.query.id);
+  const id = Array.isArray(req.query.id) ? req.query.id[0] : req.query.id;
+  const batch = await getBatch(id);
   res.status(200).json(batch.data);
 }
 

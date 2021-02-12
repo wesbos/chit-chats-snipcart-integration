@@ -160,7 +160,7 @@ export async function getBatches(): Promise<ChitChatResponse<ChitChatBatch[]>> {
   return batches;
 }
 
-export async function getBatch(id: number): Promise<ChitChatResponse<ChitChatBatch>> {
+export async function getBatch(id: string): Promise<ChitChatResponse<ChitChatBatch>> {
   const batches = await request<ChitChatBatch>({
     endpoint: `batches/${id.toString()}`,
     method: 'GET',
