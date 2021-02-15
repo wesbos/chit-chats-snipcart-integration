@@ -7,7 +7,7 @@ type OrdersProps = {
   orders: SnipCartOrder[];
 };
 
-const LabelStyles = styled.div`
+export const LabelStyles = styled.div`
   width: 4in;
   height: 6in;
   margin: 20px 0;
@@ -170,5 +170,3 @@ export function Labels({ orders }: OrdersProps) {
     </LabelsGrid>
   );
 }
-
-export { LabelStyles };
