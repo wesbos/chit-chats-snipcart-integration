@@ -27,7 +27,7 @@ function packageDescription(items: ItemsEntity[]) {
     .map(
       (item) =>
         `${item.quantity} ${item.name} - ${parseCustomFields(
-          JSON.parse(item.customFieldsJson)
+          item.customFieldsJson
         )}`
     )
     .join(', ');
