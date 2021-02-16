@@ -3,7 +3,6 @@ import {
   ItemsEntity,
   SnipCartShippingRequest,
   SnipcartShipmentRate,
-  MetaData,
 } from '../interfaces/snipcart.d';
 
 import { createShipment } from './chitchats';
