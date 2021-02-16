@@ -41,7 +41,6 @@
     "react-query": "^3.9.6",
     "react-table": "^7.6.3",
     "styled-components": "^5.2.1",
-    "tualo-datamatrix": "^0.0.1",
     "waait": "^1.0.5"
   },
   "devDependencies": {
