@@ -1,6 +1,5 @@
 import {
   SnipCartShippingRequest,
-  SnipCartOrder,
   SnipcartShipmentRate,
 } from '../interfaces/snipcart.d';
 

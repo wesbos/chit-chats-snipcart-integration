@@ -1,3 +1,5 @@
+import { ShippingRatesRequest } from './chitchat.d';
+
 export interface SnipCartOrdersResponse {
   items?: SnipCartOrder[];
   totalItems: number;
@@ -273,13 +275,13 @@ export interface SnipcartRequestParams {
   offset?: number;
   limit?: number;
   status?:
-    | 'InProgress'
-    | 'Processed'
-    | 'Disputed'
-    | 'Shipped'
-    | 'Delivered'
-    | 'Pending'
-    | 'Cancelled';
+  | 'InProgress'
+  | 'Processed'
+  | 'Disputed'
+  | 'Shipped'
+  | 'Delivered'
+  | 'Pending'
+  | 'Cancelled';
   invoiceNumber?: string;
   productId?: string;
   placedBy?: string;
@@ -322,13 +324,14 @@ export interface SnipCartProductDefinition {
 }
 
 // Shipping Request Types
-export interface SnipCartShippingRequest {
+export interface SnipCartShippingRequest extends ShippingRatesRequest {
   eventName: string;
   mode: string;
   createdOn: string;
   content: Content;
 }
 export interface Content {
+  shippingRateUserDefinedId: string;
   token: string;
   creationDate: string;
   modificationDate: string;
@@ -348,7 +351,7 @@ export interface Content {
   billingAddressPostalCode: string;
   billingAddressPhone: string;
   shippingAddressName: string;
-  shippingAddress: string;
+  shippingAddress: MetaData;
   shippingAddressCompanyName: string;
   shippingAddressAddress1: string;
   shippingAddressAddress2: string;
@@ -363,7 +366,7 @@ export interface Content {
   creditCardLast4Digits: string;
   shippingFees: number;
   shippingMethod: string;
-  items?: ItemsEntity[] | null;
+  items: ItemsEntity[];
   subtotal: number;
   totalWeight: number;
   discounts?: null[] | null;
@@ -386,5 +389,8 @@ export interface ItemsEntity {
   maxQuantity?: null;
   totalPrice: number;
   totalWeight: number;
+  width: number;
+  height: number;
+  length: number;
   shippable: boolean;
 }

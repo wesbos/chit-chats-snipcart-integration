@@ -1,5 +1,5 @@
 import { NextApiResponse, NextApiRequest } from 'next';
-import { ShippingRatesRequest } from '../../../interfaces/chitchat';
+import { SnipCartShippingRequest } from '../../../interfaces/snipcart.d';
 import { getShippingQuotes } from '../../../utils/getShippingQuote';
 import { getShipment } from '../../../utils/chitchats';
 import { convertChitChatRatesToSnipCart } from '../../../utils/snipCart';
@@ -11,7 +11,7 @@ export default async function handler(
   console.log('Shipping API Webhook - Requesting Rates');
 
   // First check if we have already quoted this one. We do this because Snipcart requests the shipping rates once from the client, and then again from their confirmation server to ensure no one monkied with the values.
-  const shippingRatesRequest = req.body as ShippingRatesRequest;
+  const shippingRatesRequest = req.body as SnipCartShippingRequest;
 
   let rateResponse;
   if (shippingRatesRequest.content.shippingMethod) {
@@ -35,7 +35,7 @@ export default async function handler(
     }
   } else {
     // Get fresh quotes
-    console.log('Fresh Rates')
+    console.log('Fresh Rates');
     rateResponse = await getShippingQuotes(shippingRatesRequest);
   }
   console.log(rateResponse);
