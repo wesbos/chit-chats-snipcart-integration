@@ -40,6 +40,7 @@ export const LabelStyles = styled.div`
     }
     h2 {
       margin: 0;
+      font-size: 1rem;
     }
   }
   ol {
@@ -66,7 +67,7 @@ export const LabelStyles = styled.div`
 
   .meta {
     display: flex;
-    font-size: 12px;
+    font-size: 13px;
     font-family: --apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen,
       Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
     gap: 10px;
@@ -107,6 +108,8 @@ function PackingList({ order }: { order: SnipCartOrder }) {
           Order {order.invoiceNumber}
           <br />
           Shipment {order?.metadata?.chitChatId}
+          <br />
+          {order.billingAddressName}
         </h2>
         <QRCode value={order.token} size={65} />
       </div>
@@ -154,7 +157,7 @@ function ShippingLabel({ order }: { order: SnipCartOrder }) {
 }
 
 type OrdersProps = {
-  orders: SnipCartOrder[];
+  orders?: SnipCartOrder[];
 };
 
 export function Labels({ orders }: OrdersProps) {

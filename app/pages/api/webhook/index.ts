@@ -4,7 +4,6 @@ import { Content } from '../../../interfaces/chitchat';
 import { buyShipment, getShipment } from '../../../utils/chitchats';
 import { updateOrder } from '../../../utils/snipCartAPI';
 
-
 interface SnipCartWebhookBody {
   eventName: string;
   content: Content;
@@ -23,13 +22,18 @@ export default async function handler(
   // console.log(req);
   if (body.eventName === 'order.completed') {
     console.log('buying Shipment!');
-    const content = body.content;
+    const { content } = body;
+    // const [
+    //   ,
+    //   ,
+    //   // method, unused
+    //   // timing, unused
+    //   shippingMethod,
+    // ] = content.shippingMethod.split(' --- ');
     const [
-      , // method, unused
-      , // timing, unused
+      shippingId,
       shippingMethod,
-    ] = content.shippingMethod.split(' --- ');
-    const shippingId = content.shippingRateUserDefinedId;
+    ] = content.shippingRateUserDefinedId.split(' --- ');
 
     const shipmentResponse = await buyShipment(shippingId, shippingMethod);
     console.dir(shipmentResponse, { depth: null });
@@ -47,7 +51,6 @@ export default async function handler(
       // don't mark as shipped just yet
       // status: 'Shipped',
       metadata: {
-        test: 'Testing...',
         label: shipment?.postage_label_png_url,
         labelZpl: shipment?.postage_label_zpl_url,
         chitChatId: shippingId,
@@ -57,9 +60,8 @@ export default async function handler(
 
     console.groupEnd();
     return res.status(200).json(updatedOrder);
-
   }
-  return res.status(200).json({ nothing: 'To send here '});
+  return res.status(200).json({ nothing: 'To send here ' });
 }
 // 1. Buy the shipment while updating postage_type to be that of the order
 // 2. Wait 3 seconds? Maybe

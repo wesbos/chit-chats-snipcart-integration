@@ -74,7 +74,8 @@ export async function request<T>({
       'Content-Type': 'application/json;',
       Authorization: process.env.CHITCHATS_API_KEY || '',
     },
-    body: method === 'GET' ? undefined : JSON.stringify(data),
+    // @ts-ignore
+    body: method === 'GET' ? undefined : data,
     method,
   }).catch((err) => {
     console.log('----------');
@@ -88,7 +89,9 @@ export async function request<T>({
     console.log(
       `Error! ${response.status} ${response.statusText} when trying to hit ${response.url}`
     );
+
     const { error } = await response.json();
+    console.log(error);
     throw new Error(error);
   }
 
@@ -102,7 +105,7 @@ interface ShipmentArgs {
 }
 
 export async function getShipments({ params }: ShipmentArgs = {}): Promise<
-  ChitChatResponse<Shipment[]>
+ChitChatResponse<Shipment[]>
 > {
   const shipments = await request<Shipment[]>({
     endpoint: 'shipments',
@@ -178,7 +181,7 @@ export async function getBatch(
 }
 
 export async function createBatch(): Promise<
-  ChitChatResponse<ChitChatBatch[]>
+ChitChatResponse<ChitChatBatch[]>
 > {
   const batch = await request<ChitChatBatch[]>({
     endpoint: 'batches',

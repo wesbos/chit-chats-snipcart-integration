@@ -21,6 +21,15 @@ export function OrderTable({ orders }: OrdersProps) {
         method: 'POST',
       }).then((x) => x.json())
   );
+  const refetchMetaData = useMutation<
+  SnipCartOrder,
+  any,
+  SnipCartMarkOrderArgs
+  >(({ token }) =>
+    fetch(`/api/orders/refetch-metadata?token=${token}`, {
+      method: 'POST',
+    }).then((x) => x.json())
+  );
 
   if (!orders) return <p>No orders to show</p>;
 
@@ -31,7 +40,9 @@ export function OrderTable({ orders }: OrdersProps) {
           <th>Name</th>
           <th>Amount</th>
           <th>Status</th>
+          <th>Snipcart</th>
           <th>ChitChat ID</th>
+          <th>Has Label?</th>
           <th>Token</th>
           <th>Actions</th>
         </tr>
@@ -54,8 +65,24 @@ export function OrderTable({ orders }: OrdersProps) {
                 rel="noopener noreferrer"
                 href={generateSnipCartUrl(order)}
               >
+                SNIP
+              </a>
+            </td>
+            <td>
+              <a
+                target="_blank"
+                rel="noopener noreferrer"
+                href={generateSnipCartUrl(order)}
+              >
                 {order.metadata?.chitChatId}
               </a>
+            </td>
+            <td>
+              {order.metadata?.label ? (
+                'YES'
+              ) : (
+                <span style={{ color: 'red' }}>NO</span>
+              )}
             </td>
             <td>
               <QRCode value={order.token} size={40} />
@@ -70,6 +97,16 @@ export function OrderTable({ orders }: OrdersProps) {
                 }}
               >
                 Mark{mutation.isLoading && 'ing'} as Shipped
+              </button>
+
+              <button
+                type="button"
+                disabled={refetchMetaData.isLoading}
+                onClick={async () => {
+                  await refetchMetaData.mutateAsync({ token: order.token });
+                }}
+              >
+                Refetch{refetchMetaData.isLoading && 'ing'} Labels
               </button>
             </td>
           </tr>

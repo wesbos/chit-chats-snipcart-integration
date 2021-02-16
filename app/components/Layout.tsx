@@ -135,10 +135,8 @@ export default function Layout({
 }: Props) {
   const isFetching = useIsFetching();
   if (isFetching) {
-    console.log('Starting progress');
     nProgress.start();
   } else {
-    console.log('ending progress');
     nProgress.done();
   }
   const [session, loading] = useSession();

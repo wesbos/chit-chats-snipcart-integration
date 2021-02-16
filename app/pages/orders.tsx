@@ -1,9 +1,10 @@
 import { useQuery } from 'react-query';
 import Layout from '../components/Layout';
 import { Labels } from '../components/Labels';
+import { SnipCartOrder } from '../interfaces/snipcart';
 
 export default function OrdersPage() {
-  const { isLoading, data: orders } = useQuery('orders', () =>
+  const { isLoading, data: orders } = useQuery<SnipCartOrder[]>('orders', () =>
     fetch('/api/orders?limit=100&status=Processed').then((res) => res.json())
   );
 
