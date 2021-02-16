@@ -2,15 +2,10 @@ import { useRouter } from 'next/dist/client/router';
 import QRCode from 'qrcode.react';
 import { useState } from 'react';
 import { useQuery } from 'react-query';
-import styled from 'styled-components';
 import GenericTable from '../../components/GenericTable';
-// import { LabelStyles } from '../../components/Labels';
+import { LabelStyles } from '../../components/Labels';
 import Layout from '../../components/Layout';
 import useBatch from '../../hooks/useBatch';
-
-const LabelStyles = styled.div`
-  border: 1px solid red;
-`;
 
 export default function OrdersPage() {
   const { query } = useRouter();
