@@ -45,16 +45,16 @@ export async function getShippingQuotes(
     (tally: number, item) => item.weight * item.quantity + tally,
     0
   );
-  // const shipDate = new Date();
-  // // Ships tomorrow
-  // shipDate.setDate(shipDate.getDate() + 1);
-  // const [MM, DD, YYYY] = shipDate
-  //   .toLocaleString('en-US', {
-  //     year: 'numeric',
-  //     month: '2-digit',
-  //     day: '2-digit',
-  //   })
-  //   .split('/');
+  const shipDate = new Date();
+  // Ships tomorrow
+  shipDate.setDate(shipDate.getDate() + 1);
+  const [MM, DD, YYYY] = shipDate
+    .toLocaleString('en-US', {
+      year: 'numeric',
+      month: '2-digit',
+      day: '2-digit',
+    })
+    .split('/');
   const res = await createShipment({
     // The User Details
     name: shippingAddress.fullName,
@@ -78,8 +78,8 @@ export async function getShippingQuotes(
     weight_unit: 'g',
     weight: totalWeight,
     // The Most Important Parts
-    // ship_date: `${YYYY}-${MM}-${DD}`,
-    ship_date: 'today', // TODO: Make this flexible for tomorrow. The above should work
+    ship_date: `${YYYY}-${MM}-${DD}`,
+    // ship_date: 'today', // TODO: Make this flexible for tomorrow. The above should work
     postage_type: 'unknown',
   });
 
