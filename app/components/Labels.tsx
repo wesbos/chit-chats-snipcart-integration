@@ -3,10 +3,6 @@ import { Fragment } from 'react';
 import styled from 'styled-components';
 import { SnipCartOrder } from '../interfaces/snipcart';
 
-type OrdersProps = {
-  orders: SnipCartOrder[];
-};
-
 export const LabelStyles = styled.div`
   width: 4in;
   height: 6in;
@@ -156,6 +152,10 @@ function ShippingLabel({ order }: { order: SnipCartOrder }) {
     </LabelStyles>
   );
 }
+
+type OrdersProps = {
+  orders: SnipCartOrder[];
+};
 
 export function Labels({ orders }: OrdersProps) {
   if (!orders) return <p>No orders to show</p>;
