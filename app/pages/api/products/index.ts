@@ -2,7 +2,6 @@ import Cors from 'cors';
 import { NextApiResponse, NextApiRequest } from 'next';
 import initMiddleware from '../../../utils/initMiddleware';
 import { getProducts } from '../../../utils/snipCartAPI';
-import { withAuth } from '../../../utils/withAuth';
 
 const cors = initMiddleware(
   Cors({
