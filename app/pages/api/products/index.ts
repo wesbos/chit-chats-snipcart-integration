@@ -20,4 +20,4 @@ async function handler(
   res.status(200).json(products);
 }
 
-export default withAuth(handler);
+export default handler;
