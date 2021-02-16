@@ -1,6 +1,6 @@
 {
   "name": "swag-fulfilment",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "scripts": {
     "dev": "next --port 7777",
     "ngrok": "ngrok http -subdomain=wesbosswagx 7777",
