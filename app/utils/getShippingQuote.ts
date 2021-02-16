@@ -1,7 +1,9 @@
 import {
+  SnipCartCustomField,
   ItemsEntity,
   SnipCartShippingRequest,
   SnipcartShipmentRate,
+  MetaData,
 } from '../interfaces/snipcart.d';
 
 import { createShipment } from './chitchats';
@@ -17,8 +19,19 @@ interface ShippingQuotes {
   errors?: ShippingRateError[];
 }
 
+function parseCustomFields(customFields: SnipCartCustomField[]) {
+  return customFields.map((field) => `${field.displayValue}`).join(' ');
+}
+
 function packageDescription(items: ItemsEntity[]) {
-  return items.map((item) => `${item.quantity} ${item.name}`).join('\n');
+  return items
+    .map(
+      (item) =>
+        `${item.quantity} ${item.name} - ${parseCustomFields(
+          JSON.parse(item.customFieldsJson)
+        )}`
+    )
+    .join(', ');
 }
 
 export async function getShippingQuotes(
