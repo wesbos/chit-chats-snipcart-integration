@@ -1,4 +1,5 @@
 import {
+  ItemsEntity,
   SnipCartShippingRequest,
   SnipcartShipmentRate,
 } from '../interfaces/snipcart.d';
@@ -15,6 +16,11 @@ interface ShippingQuotes {
   rates?: SnipcartShipmentRate[] | null;
   errors?: ShippingRateError[];
 }
+
+function packageDescription(items: ItemsEntity[]) {
+  return items.map((item) => `${item.quantity} ${item.name}`).join('\n');
+}
+
 export async function getShippingQuotes(
   incomingOrder: SnipCartShippingRequest
 ): Promise<ShippingQuotes> {
@@ -45,10 +51,10 @@ export async function getShippingQuotes(
     phone: shippingAddress.phone || '',
     country_code: shippingAddress.country,
     // The Item Details
-    description: items[0].name,
+    description: packageDescription(items),
     value: `${subtotal}`,
     value_currency: 'usd',
-    package_type: 'parcel',
+    package_type: 'thick_envelope',
     package_contents: 'merchandise',
     size_unit: 'cm',
     size_x: items[0].width,
