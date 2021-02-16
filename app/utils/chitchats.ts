@@ -1,13 +1,17 @@
-import { BatchRequest } from './../interfaces/chitchat.d';
 import fetch from 'isomorphic-fetch';
 import { config } from 'dotenv';
-import { Shipment, CreateShipmentInput } from '../../app/interfaces/chitchat';
+import {
+  BatchRequest,
+  Shipment,
+  CreateShipmentInput,
+} from '../interfaces/chitchat.d';
+
 import { MetaData } from '../interfaces/snipcart';
 
 config();
 const baseURL =
   process.env.NODE_ENV === 'production'
-    ? 'https://chitchats.com/api/v1'
+    ? 'https://staging.chitchats.com/api/v1'
     : 'https://staging.chitchats.com/api/v1';
 
 interface RequestOptions {
@@ -40,7 +44,7 @@ export type ShipmentResponse = {
 
 export type ChitChatBatch = {
   id: number;
-  status:	"ready" | "pending" | "received";
+  status: 'ready' | 'pending' | 'received';
   created_at: string;
   label_png_url: string;
   label_zpl_url: string;
@@ -49,7 +53,7 @@ export type ChitChatBatch = {
 export type ChitChatAddShipmentToBatchInput = {
   batch_id: string;
   shipment_ids: string[];
-}
+};
 
 export async function request<T>({
   endpoint,
@@ -63,9 +67,7 @@ export async function request<T>({
     throw new Error('No Client ID Provided.');
   }
   const url = `${baseURL}/clients/${clientId}/${endpoint}${params}`;
-  console.log(
-    `Fetching ${url} via a ${method} request with data ${data}`
-  );
+  console.log(`Fetching ${url} via a ${method} request with data ${data}`);
 
   const response = await fetch(url, {
     headers: {
@@ -74,16 +76,18 @@ export async function request<T>({
     },
     body: method === 'GET' ? undefined : JSON.stringify(data),
     method,
-  }).catch(err => {
+  }).catch((err) => {
     console.log('----------');
-    console.log(err)
+    console.log(err);
     console.log('----------');
   });
-  if(!response) {
+  if (!response) {
     throw new Error('No response');
   }
   if (response.status >= 400 && response.status <= 500) {
-    console.log(`Error! ${response.status} ${response.statusText} when trying to hit ${response.url}`);
+    console.log(
+      `Error! ${response.status} ${response.statusText} when trying to hit ${response.url}`
+    );
     const { error } = await response.json();
     throw new Error(error);
   }
@@ -94,13 +98,15 @@ export async function request<T>({
 }
 
 interface ShipmentArgs {
-  params?: string
+  params?: string;
 }
 
-export async function getShipments({ params }: ShipmentArgs = {}): Promise<ChitChatResponse<Shipment[]>> {
+export async function getShipments({ params }: ShipmentArgs = {}): Promise<
+  ChitChatResponse<Shipment[]>
+> {
   const shipments = await request<Shipment[]>({
     endpoint: 'shipments',
-    params
+    params,
   });
   return shipments;
 }
@@ -153,14 +159,16 @@ export async function buyShipment(
 
 export async function getBatches(): Promise<ChitChatResponse<ChitChatBatch[]>> {
   const batches = await request<ChitChatBatch[]>({
-    endpoint: `batches`,
+    endpoint: 'batches',
     method: 'GET',
     json: true,
   });
   return batches;
 }
 
-export async function getBatch(id: string): Promise<ChitChatResponse<ChitChatBatch>> {
+export async function getBatch(
+  id: string
+): Promise<ChitChatResponse<ChitChatBatch>> {
   const batches = await request<ChitChatBatch>({
     endpoint: `batches/${id.toString()}`,
     method: 'GET',
@@ -169,24 +177,26 @@ export async function getBatch(id: string): Promise<ChitChatResponse<ChitChatBat
   return batches;
 }
 
-export async function createBatch(): Promise<ChitChatResponse<ChitChatBatch[]>> {
+export async function createBatch(): Promise<
+  ChitChatResponse<ChitChatBatch[]>
+> {
   const batch = await request<ChitChatBatch[]>({
-    endpoint: `batches`,
+    endpoint: 'batches',
     method: 'POST',
     json: false,
   });
   return batch;
 }
 
-
-export async function addToBatch(data: BatchRequest): Promise<ChitChatResponse<null>> {
+export async function addToBatch(
+  data: BatchRequest
+): Promise<ChitChatResponse<null>> {
   console.log(data);
   const batch = await request<null>({
-    endpoint: `shipments/add_to_batch`,
+    endpoint: 'shipments/add_to_batch',
     method: 'PATCH',
     json: false,
-    data
+    data,
   });
   return batch;
 }
-
