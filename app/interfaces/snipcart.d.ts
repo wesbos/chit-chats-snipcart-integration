@@ -320,3 +320,71 @@ export interface SnipCartProductDefinition {
   hasTaxesIncluded?: boolean;
   taxable?: boolean;
 }
+
+// Shipping Request Types
+export interface SnipCartShippingRequest {
+  eventName: string;
+  mode: string;
+  createdOn: string;
+  content: Content;
+}
+export interface Content {
+  token: string;
+  creationDate: string;
+  modificationDate: string;
+  status: string;
+  currency: string;
+  lang: string;
+  paymentMethod: string;
+  email: string;
+  cardHolderName: string;
+  billingAddressName: string;
+  billingAddressCompanyName: string;
+  billingAddressAddress1: string;
+  billingAddressAddress2: string;
+  billingAddressCity: string;
+  billingAddressCountry: string;
+  billingAddressProvince: string;
+  billingAddressPostalCode: string;
+  billingAddressPhone: string;
+  shippingAddressName: string;
+  shippingAddress: string;
+  shippingAddressCompanyName: string;
+  shippingAddressAddress1: string;
+  shippingAddressAddress2: string;
+  shippingAddressCity: string;
+  shippingAddressCountry: string;
+  shippingAddressProvince: string;
+  shippingAddressPostalCode: string;
+  shippingAddressPhone: string;
+  shippingAddressSameAsBilling: boolean;
+  finalGrandTotal: number;
+  shippingAddressComplete: boolean;
+  creditCardLast4Digits: string;
+  shippingFees: number;
+  shippingMethod: string;
+  items?: ItemsEntity[] | null;
+  subtotal: number;
+  totalWeight: number;
+  discounts?: null[] | null;
+  willBePaidLater: boolean;
+}
+export interface ItemsEntity {
+  uniqueId: string;
+  token: string;
+  id: string;
+  name: string;
+  price: number;
+  originalPrice: number;
+  quantity: number;
+  url: string;
+  weight: number;
+  description: string;
+  image: string;
+  customFieldsJson: string;
+  stackable: boolean;
+  maxQuantity?: null;
+  totalPrice: number;
+  totalWeight: number;
+  shippable: boolean;
+}

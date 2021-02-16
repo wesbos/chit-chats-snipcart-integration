@@ -1,4 +1,9 @@
-import { SnipcartShipmentRate } from '../interfaces/snipcart.d';
+import {
+  SnipCartShippingRequest,
+  SnipCartOrder,
+  SnipcartShipmentRate,
+} from '../interfaces/snipcart.d';
+
 import { createShipment } from './chitchats';
 import { convertChitChatRatesToSnipCart } from './snipCart';
 
@@ -12,15 +17,15 @@ interface ShippingQuotes {
   errors?: ShippingRateError[];
 }
 export async function getShippingQuotes(
-  incomingOrder: any
+  incomingOrder: SnipCartShippingRequest
 ): Promise<ShippingQuotes> {
   console.group('Shipping Request');
   // A shipping quote is just a create shipment call with postage_type: 'unknown',
   const order = incomingOrder;
   const { shippingAddress, items, subtotal } = order.content;
 
-  const totalWeight = items.reduce(
-    (tally: number, item: any) => item.weight + tally,
+  const totalWeight = items?.reduce(
+    (tally: number, item) => item.weight * item.quantity + tally,
     0
   );
   // const [MM, DD, YYYY] = new Date()
@@ -54,7 +59,7 @@ export async function getShippingQuotes(
     weight: totalWeight,
     // The Most Important Parts
     // ship_date: `${YYYY}-${MM}-${DD}`,
-    ship_date: `today`, // TODO: Make this flexible for tomorrow. The above should work
+    ship_date: 'today', // TODO: Make this flexible for tomorrow. The above should work
     postage_type: 'unknown',
   });
 
