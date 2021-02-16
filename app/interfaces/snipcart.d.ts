@@ -59,6 +59,7 @@ export interface SnipCartOrder {
   paymentMethod: string;
   notes?: null;
   customFieldsJson: string;
+  customFields: SnipCartCustomField[];
   userId: string;
   completionDate: string;
   cardType: string;
@@ -385,6 +386,7 @@ export interface ItemsEntity {
   description: string;
   image: string;
   customFieldsJson: string;
+  customFields: SnipCartCustomField[];
   stackable: boolean;
   maxQuantity?: null;
   totalPrice: number;
