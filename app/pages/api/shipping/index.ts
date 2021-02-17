@@ -19,7 +19,9 @@ export default async function handler(
       'There is an existing shipping method, lets check for a shipping ID'
     );
 
-    const shippingId = shippingRatesRequest.content.shippingRateUserDefinedId;
+    const [
+      shippingId,
+    ] = shippingRatesRequest.content.shippingRateUserDefinedId.split(' --- ');
 
     if (shippingId) {
       console.log(`There is an existing shipping ID!! ${shippingId}`);
