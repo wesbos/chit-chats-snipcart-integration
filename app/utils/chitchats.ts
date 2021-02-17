@@ -68,14 +68,14 @@ export async function request<T>({
   }
   const url = `${baseURL}/clients/${clientId}/${endpoint}${params}`;
   console.log(`Fetching ${url} via a ${method} request with data ${data}`);
-
+  const body = typeof data === 'string' ? data : JSON.stringify(data);
   const response = await fetch(url, {
     headers: {
       'Content-Type': 'application/json;',
       Authorization: process.env.CHITCHATS_API_KEY || '',
     },
-    // @ts-ignore
-    body: method === 'GET' ? undefined : data,
+    // This needs to be json.stringify for createShipment(), but an object for addToBatch
+    body: method === 'GET' ? undefined : body,
     method,
   }).catch((err) => {
     console.log('----------');
