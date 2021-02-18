@@ -1,7 +1,7 @@
 import QRCode from 'qrcode.react';
-import { ChangeEvent, FormEvent, useState } from 'react';
+import { ChangeEvent, useState } from 'react';
 import { useMutation } from 'react-query';
-import { SnipCartOrder } from '../interfaces/snipcart';
+import { MetaData, SnipCartOrder } from '../interfaces/snipcart';
 
 type OrdersProps = {
   orders: SnipCartOrder[];
@@ -15,7 +15,7 @@ function generateSnipCartUrl(order: SnipCartOrder) {
   return `https://app.snipcart.com/dashboard/orders/${order.token}`;
 }
 
-function useFilters(initialData) {
+function useFilters(initialData: MetaData) {
   const [filters, setFilters] = useState<Record<string, boolean>>(initialData);
   function handleFilterChange(e: ChangeEvent<HTMLInputElement>) {
     console.log(e.target.value);
