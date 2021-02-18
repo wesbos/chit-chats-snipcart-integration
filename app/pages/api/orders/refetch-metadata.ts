@@ -40,6 +40,8 @@ async function handler(
       labelZpl: shipmentData?.postage_label_zpl_url,
       chitChatId,
     },
+    trackingNumber: shipmentData?.carrier_tracking_code,
+    trackingUrl: shipmentData?.tracking_url,
   });
   res.status(200).json(updatedOrder);
 }

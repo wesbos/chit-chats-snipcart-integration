@@ -20,7 +20,8 @@
     },
     "rules": {
       "no-use-before-define": 0,
-      "react/jsx-props-no-spreading": 0
+      "react/jsx-props-no-spreading": 0,
+      "@typescript-eslint/no-explicit-any": 0
     }
   },
   "dependencies": {

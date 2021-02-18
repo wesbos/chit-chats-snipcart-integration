@@ -74,6 +74,9 @@ const GlobalStyles = createGlobalStyle`
     td {
       padding: 2px;
       vertical-align: middle;
+      max-width: 150px;
+      overflow: scroll;
+      text-overflow: ellipsis;
     }
   }
   tr:nth-child(even) {
