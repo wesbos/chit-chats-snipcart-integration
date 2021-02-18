@@ -148,6 +148,7 @@ export default function Layout({
   if (!session)
     return (
       <div>
+        <h2>{process.env.NODE_ENV}</h2>
         <Link href="/auth">
           <a>Login</a>
         </Link>
