@@ -148,7 +148,8 @@ export default function Layout({
   if (!session)
     return (
       <div>
-        <h2>{process.env.NODE_ENV}</h2>
+        <h2>VERCEL_ENV: {process.env.VERCEL_ENV}</h2>
+        <h2>NODE_ENV: {process.env.NODE_ENV}</h2>
         <Link href="/auth">
           <a>Login</a>
         </Link>

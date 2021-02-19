@@ -10,8 +10,8 @@ import { MetaData } from '../interfaces/snipcart';
 
 config();
 const baseURL =
-  process.env.NODE_ENV === 'production'
-    ? 'https://staging.chitchats.com/api/v1'
+  process.env.VERCEL_ENV === 'production'
+    ? 'https://chitchats.com/api/v1'
     : 'https://staging.chitchats.com/api/v1';
 
 interface RequestOptions {
@@ -105,7 +105,7 @@ interface ShipmentArgs {
 }
 
 export async function getShipments({ params }: ShipmentArgs = {}): Promise<
-ChitChatResponse<Shipment[]>
+  ChitChatResponse<Shipment[]>
 > {
   const shipments = await request<Shipment[]>({
     endpoint: 'shipments',
@@ -181,7 +181,7 @@ export async function getBatch(
 }
 
 export async function createBatch(): Promise<
-ChitChatResponse<ChitChatBatch[]>
+  ChitChatResponse<ChitChatBatch[]>
 > {
   const batch = await request<ChitChatBatch[]>({
     endpoint: 'batches',
