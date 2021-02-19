@@ -1,6 +1,7 @@
 import { NextApiResponse, NextApiRequest } from 'next';
 
 async function handler(
+  // @ts-ignore
   req: NextApiRequest,
   res: NextApiResponse
 ): Promise<void> {
