@@ -26,6 +26,7 @@ export interface SnipCartOrderResponse {
 }
 
 export interface SnipCartOrder {
+  id: string;
   discounts?: null[] | null;
   items?: SnipCartOrderItem[] | null;
   plans?: null[] | null;
@@ -163,6 +164,7 @@ export interface SnipCartOrderItem {
 export interface SnipCartCustomField {
   name: string;
   displayValue: string;
+  value: string;
 }
 export interface PaymentSchedule {
   interval: number;

@@ -2,6 +2,7 @@ import QRCode from 'qrcode.react';
 import { ChangeEvent, useState } from 'react';
 import { useMutation } from 'react-query';
 import { MetaData, SnipCartOrder } from '../interfaces/snipcart';
+import { OrderVariations } from './OrderVariations';
 
 type OrdersProps = {
   orders: SnipCartOrder[];
@@ -13,6 +14,11 @@ interface SnipCartMarkOrderArgs {
 
 function generateSnipCartUrl(order: SnipCartOrder) {
   return `https://app.snipcart.com/dashboard/orders/${order.token}`;
+}
+function generateChitChatUrl(order: SnipCartOrder) {
+  return `https://chitchats.com/clients/408432/shipments/search?q=${
+    order.metadata?.chitChatId as string
+  }`;
 }
 
 function useFilters(initialData: MetaData) {
@@ -72,7 +78,7 @@ function OrderRow({ order }: { order: SnipCartOrder }) {
         <a
           target="_blank"
           rel="noopener noreferrer"
-          href={generateSnipCartUrl(order)}
+          href={generateChitChatUrl(order)}
         >
           {order.metadata?.chitChatId}
         </a>
@@ -125,6 +131,7 @@ export function OrderTable({ orders }: OrdersProps) {
 
   return (
     <div>
+      <OrderVariations orders={orders} />
       <label htmlFor="noLabel">
         <input
           type="checkbox"

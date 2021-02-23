@@ -21,6 +21,8 @@ export default async function handler(
   console.log(`Incoming Webhook: ${body.eventName}`);
   // console.log(req);
   if (body.eventName === 'order.completed') {
+    // Right now we're just getting quotes. buying shipment once we are ready to ship
+    return res.status(200).json({ nothing: 'Not currently Buying Shipment' });
     console.log('buying Shipment!');
     const { content } = body;
     // const [
