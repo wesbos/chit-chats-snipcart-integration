@@ -1,7 +1,11 @@
 import dotenv from 'dotenv';
 import fetch from 'isomorphic-fetch';
-import { SnipCartOrder } from '../interfaces/snipcart';
-import { SnipCartOrdersResponse, SnipCartProductDefinition, SnipcartRequestParams } from './../interfaces/snipcart.d';
+import {
+  SnipCartOrder,
+  SnipCartOrdersResponse,
+  SnipCartProductDefinition,
+  SnipcartRequestParams,
+} from '../interfaces/snipcart';
 
 dotenv.config();
 const endpoint = 'https://app.snipcart.com/api';
@@ -10,6 +14,7 @@ const headers = {
   Authorization: `Basic ${Buffer.from(process.env.SNIPCART_KEY || '').toString(
     'base64'
   )}`,
+  'Content-Type': 'application/json',
 };
 
 export async function getProducts(): Promise<SnipCartProductDefinition[]> {
@@ -20,8 +25,9 @@ export async function getProducts(): Promise<SnipCartProductDefinition[]> {
   return products.items;
 }
 
-
-export default async function getOrders(params: SnipcartRequestParams): Promise<SnipCartOrder[]> {
+export default async function getOrders(
+  params: SnipcartRequestParams
+): Promise<SnipCartOrder[]> {
   const y = params as URLSearchParams;
   const paramsString = new URLSearchParams(y).toString();
   const res = await fetch(`${endpoint}/orders?${paramsString}`, {
@@ -31,20 +37,19 @@ export default async function getOrders(params: SnipcartRequestParams): Promise<
   // await fs.writeFileSync('./order-items.json', JSON.stringify(data));
   // console.dir(data, { depth: null });
   if (orders?.length) {
-    console.log(`Back with ${orders.length} Orders!`);
+    // console.log(`Back with ${orders.length} Orders!`);
     return orders;
   }
   return [];
 }
 
-export async function getOrder(orderToken:string): Promise<SnipCartOrder> {
+export async function getOrder(orderToken: string): Promise<SnipCartOrder> {
   const res = await fetch(`${endpoint}/orders/${orderToken}`, {
     headers,
   });
   const order = (await res.json()) as SnipCartOrder;
   return order;
 }
-
 
 interface MetaData {
   [key: string]: any;
@@ -65,3 +70,4 @@ export async function updateOrder(
   return (await res.json()) as SnipCartOrder;
 }
 
+export { endpoint, headers };

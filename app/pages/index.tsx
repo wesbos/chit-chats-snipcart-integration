@@ -4,7 +4,7 @@ import { OrderTable } from '../components/OrderTable';
 
 export default function OrdersPage() {
   const { isLoading, data: orders } = useQuery('orders', () =>
-    fetch('/api/orders?limit=200&status=Processed').then((res) => res.json())
+    fetch('/api/orders?limit=200&status=Shipped').then((res) => res.json())
   );
 
   return (

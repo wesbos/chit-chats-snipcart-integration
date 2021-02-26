@@ -40,7 +40,9 @@ export default function GenericTable({
           {data.map((item) => (
             <tr key={item.id}>
               {columns.map((heading) => (
-                <td key={heading}>{item[heading]}</td>
+                <td className="blur" key={heading}>
+                  {item[heading]}
+                </td>
               ))}
             </tr>
           ))}

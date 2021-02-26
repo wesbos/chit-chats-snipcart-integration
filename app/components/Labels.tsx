@@ -151,7 +151,7 @@ function ShippingLabel({ order }: { order: SnipCartOrder }) {
   return (
     <LabelStyles className="label4x6 shipping">
       <QRCode size={50} value={order.token} />
-      <img src={order?.metadata?.label} alt="" />
+      <img className="blur" src={order?.metadata?.label} alt="" />
     </LabelStyles>
   );
 }

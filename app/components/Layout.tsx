@@ -100,6 +100,13 @@ const GlobalStyles = createGlobalStyle`
       border-left-color: var(--yellow);
     }
   }
+
+  .blurred .blur {
+    filter: blur(4px);
+  }
+  .blurred span.blur {
+    filter: blur(3px);
+  }
 `;
 
 const LayoutStyles = styled.div`

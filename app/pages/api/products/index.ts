@@ -6,7 +6,7 @@ import { getProducts } from '../../../utils/snipCartAPI';
 const cors = initMiddleware(
   Cors({
     methods: ['GET'],
-    origin: 'https://wesbos.com',
+    origin: '*',
   })
 );
 

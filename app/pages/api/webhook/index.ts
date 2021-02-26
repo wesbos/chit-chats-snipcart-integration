@@ -25,13 +25,6 @@ export default async function handler(
     return res.status(200).json({ nothing: 'Not currently Buying Shipment' });
     console.log('buying Shipment!');
     const { content } = body;
-    // const [
-    //   ,
-    //   ,
-    //   // method, unused
-    //   // timing, unused
-    //   shippingMethod,
-    // ] = content.shippingMethod.split(' --- ');
     const [
       shippingId,
       shippingMethod,

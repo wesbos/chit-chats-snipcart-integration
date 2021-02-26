@@ -45,12 +45,27 @@ function OrderRow({ order }: { order: SnipCartOrder }) {
   );
 
   const refetchMetaData = useMutation<
-  SnipCartOrder,
-  any,
-  SnipCartMarkOrderArgs
+    SnipCartOrder,
+    any,
+    SnipCartMarkOrderArgs
   >(({ token }) =>
     fetch(`/api/orders/refetch-metadata?token=${token}`, {
       method: 'POST',
+    }).then((x) => x.json() as Promise<SnipCartOrder>)
+  );
+
+  const sendTrackingInfo = useMutation<
+    SnipCartOrder,
+    any,
+    SnipCartMarkOrderArgs
+  >(({ token }) =>
+    fetch(`/api/snipcart/orders/${token}/notifications`, {
+      method: 'POST',
+      body: JSON.stringify({
+        type: 'TrackingNumber',
+        message: 'Test Message',
+        deliveryMethod: 'Email',
+      }),
     }).then((x) => x.json() as Promise<SnipCartOrder>)
   );
 
@@ -59,8 +74,9 @@ function OrderRow({ order }: { order: SnipCartOrder }) {
       <td>
         <img width="40" src={order.user.gravatarUrl} alt="" />
         <p>
-          {order.user.billingAddressName} -<br />
-          {order.email}
+          {order.user.billingAddressName}
+          <br />
+          <span className="blur">{order.email}</span>
         </p>
       </td>
       <td>${order.finalGrandTotal}</td>
@@ -115,13 +131,22 @@ function OrderRow({ order }: { order: SnipCartOrder }) {
         >
           Refetch Meta
         </button>
+        <button
+          type="button"
+          disabled={sendTrackingInfo.isLoading}
+          onClick={async () => {
+            await sendTrackingInfo.mutateAsync({ token: order.token });
+          }}
+        >
+          Send Tracking
+        </button>
       </td>
     </tr>
   );
 }
 
 export function OrderTable({ orders }: OrdersProps) {
-  const { filters, handleFilterChange } = useFilters({ noLabel: true });
+  const { filters, handleFilterChange } = useFilters({ noLabel: false });
   const ordersToShow =
     orders && filters.noLabel
       ? orders.filter((order) => !order.metadata?.label)

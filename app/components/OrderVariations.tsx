@@ -37,7 +37,6 @@ export function OrderVariations({ orders }: OrdersProps) {
     acc[item.id] = product;
     return acc;
   }, {});
-  console.log(stockLevels);
 
   return (
     <div>
